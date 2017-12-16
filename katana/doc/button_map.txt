@@ -1,0 +1,63 @@
+Driver:
+ A          - 
+ B          - 
+ X          - 
+ Y          - 
+ Start      - 
+ Back       - 
+ RB         - 
+ LB         - Slow
+ RT         - 
+ LT         - Turbo
+ L_Joy:
+  X Axis    - 
+  Y Axis    - Forward/backward
+  Pushed in - 
+ R_Joy:
+  X Axis    - Turning
+  Y Axis    - 
+  Pushed in - 
+POV:
+  Center     - 
+  Up         - Nudge forward
+  Up_left    - 
+  Left       - Nudge counterclockwise
+  Down_left  - 
+  Down       - Nudge backward
+  Down_right - 
+  Right      - Nudge clockwise
+  Up_right   - 
+
+Gunner:
+ A          - Grabber toggle
+ B          - 
+ X          - 
+ Y          - 
+ Start      - 
+ Back       -
+ RB         - Open pinchers
+ LB         - Close pinchers
+ RT         - 
+ LT         - 
+ L_Joy:
+  Up        - 
+  Down      - 
+  Left      - 
+  Right     - 
+  Pushed in - 
+ R_Joy:
+  Up        - 
+  Down      - 
+  Left      - 
+  Right     - 
+  Pushed in - 
+ POV:        
+  Center     - 
+  Up         - Grabber up
+  Up_left    - 
+  Left       - 
+  Down_left  - 
+  Down       - Grabber down
+  Down_right - 
+  Right      - 
+  Up_right   - 

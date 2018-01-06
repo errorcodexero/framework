@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -12,10 +12,11 @@
 #include <string>
 #include <vector>
 
+#include <llvm/SmallString.h>
+#include <llvm/SmallVector.h>
+#include <support/mutex.h>
+
 #include "HAL/SerialPort.h"
-#include "HAL/cpp/priority_mutex.h"
-#include "llvm/SmallString.h"
-#include "llvm/SmallVector.h"
 
 namespace hal {
 class SerialHelper {
@@ -45,7 +46,7 @@ class SerialHelper {
 
   int32_t m_resourceHandle;
 
-  static priority_mutex m_nameMutex;
+  static wpi::mutex m_nameMutex;
   static std::string m_usbNames[2];
 };
 }  // namespace hal

@@ -5,10 +5,10 @@
 # It is necessary for linking the library.
 
 # The name that we can dlopen(3).
-dlname='libasan.so.1'
+dlname='libasan.so.2'
 
 # Names of this library.
-library_names='libasan.so.1.0.0 libasan.so.1 libasan.so'
+library_names='libasan.so.2.0.0 libasan.so.2 libasan.so'
 
 # The name of the static archive.
 old_library='libasan.a'
@@ -23,7 +23,7 @@ dependency_libs=' -lpthread -ldl '/frc/arm-frc-linux-gnueabi/lib'/libstdc++.la '
 weak_library_names=''
 
 # Version information for libasan.
-current=1
+current=2
 age=0
 revision=0
 

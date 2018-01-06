@@ -1,25 +1,33 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2015. All Rights Reserved.                             */
+/* Copyright (c) FIRST 2015-2018. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#ifndef ITABLE_H_
-#define ITABLE_H_
+#ifndef NTCORE_TABLES_ITABLE_H_
+#define NTCORE_TABLES_ITABLE_H_
 
 #include <memory>
+#include <string>
+#include <vector>
 
-#include "llvm/StringRef.h"
-#include "nt_Value.h"
-#include "support/deprecated.h"
+#include <llvm/StringRef.h>
+#include <llvm/Twine.h>
+#include <support/deprecated.h>
+
+#include "networktables/NetworkTableValue.h"
+
+namespace nt {
+class NetworkTable;
+}  // namespace nt
 
 class ITableListener;
 
 /**
  * A table whose values can be read and written to
  */
-class ITable {
+class WPI_DEPRECATED("Use NetworkTable directly") ITable {
  public:
   /**
    * Determines whether the given key is in this table.
@@ -27,7 +35,7 @@ class ITable {
    * @param key the key to search for
    * @return true if the table as a value assigned to the given key
    */
-  virtual bool ContainsKey(llvm::StringRef key) const = 0;
+  virtual bool ContainsKey(const llvm::Twine& key) const = 0;
 
   /**
    * Determines whether there exists a non-empty subtable for this key
@@ -37,7 +45,7 @@ class ITable {
    * @return true if there is a subtable with the key which contains at least
    * one key/subtable of its own
    */
-  virtual bool ContainsSubTable(llvm::StringRef key) const = 0;
+  virtual bool ContainsSubTable(const llvm::Twine& key) const = 0;
 
   /**
    * Gets the subtable in this table for the given name.
@@ -45,7 +53,8 @@ class ITable {
    * @param key the name of the table relative to this one
    * @return a sub table relative to this one
    */
-  virtual std::shared_ptr<ITable> GetSubTable(llvm::StringRef key) const = 0;
+  virtual std::shared_ptr<nt::NetworkTable> GetSubTable(
+      const llvm::Twine& key) const = 0;
 
   /**
    * @param types bitmask of types; 0 is treated as a "don't care".
@@ -112,7 +121,7 @@ class ITable {
    *
    * @param key the key name
    */
-  virtual void Delete(llvm::StringRef key) = 0;
+  virtual void Delete(const llvm::Twine& key) = 0;
 
   /**
    * Gets the value associated with a key as an object
@@ -121,7 +130,7 @@ class ITable {
    * @return the value associated with the given key, or nullptr if the key
    * does not exist
    */
-  virtual std::shared_ptr<nt::Value> GetValue(llvm::StringRef key) const = 0;
+  virtual std::shared_ptr<nt::Value> GetValue(const llvm::Twine& key) const = 0;
 
   /**
    * Gets the current value in the table, setting it if it does not exist.
@@ -129,7 +138,7 @@ class ITable {
    * @param defaultValue the default value to set if key doesn't exist.
    * @returns False if the table key exists with a different type
    */
-  virtual bool SetDefaultValue(llvm::StringRef key,
+  virtual bool SetDefaultValue(const llvm::Twine& key,
                                std::shared_ptr<nt::Value> defaultValue) = 0;
 
   /**
@@ -139,7 +148,7 @@ class ITable {
    * @param value the value that will be assigned
    * @return False if the table key already exists with a different type
    */
-  virtual bool PutValue(llvm::StringRef key,
+  virtual bool PutValue(const llvm::Twine& key,
                         std::shared_ptr<nt::Value> value) = 0;
 
   /**
@@ -158,21 +167,6 @@ class ITable {
    * @returns False if the table key exists with a different type
    */
   virtual bool SetDefaultNumber(llvm::StringRef key, double defaultValue) = 0;
-
-  /**
-   * Gets the number associated with the given name.
-   *
-   * @param key the key to look up
-   * @return the value associated with the given key
-   * @throws TableKeyNotDefinedException if there is no value associated with
-   * the given key
-   * @deprecated This exception-raising method has been replaced by the
-   * default-taking method.
-   */
-  WPI_DEPRECATED(
-      "Raises an exception if key not found; "
-      "use GetNumber(StringRef key, double defaultValue) instead")
-  virtual double GetNumber(llvm::StringRef key) const = 0;
 
   /**
    * Gets the number associated with the given name.
@@ -201,21 +195,6 @@ class ITable {
    */
   virtual bool SetDefaultString(llvm::StringRef key,
                                 llvm::StringRef defaultValue) = 0;
-
-  /**
-   * Gets the string associated with the given name.
-   *
-   * @param key the key to look up
-   * @return the value associated with the given key
-   * @throws TableKeyNotDefinedException if there is no value associated with
-   * the given key
-   * @deprecated This exception-raising method has been replaced by the
-   * default-taking method.
-   */
-  WPI_DEPRECATED(
-      "Raises an exception if key not found; "
-      "use GetString(StringRef key, StringRef defaultValue) instead")
-  virtual std::string GetString(llvm::StringRef key) const = 0;
 
   /**
    * Gets the string associated with the given name. If the key does not
@@ -248,21 +227,6 @@ class ITable {
    * @returns False if the table key exists with a different type
    */
   virtual bool SetDefaultBoolean(llvm::StringRef key, bool defaultValue) = 0;
-
-  /**
-   * Gets the boolean associated with the given name.
-   *
-   * @param key the key to look up
-   * @return the value associated with the given key
-   * @throws TableKeyNotDefinedException if there is no value associated with
-   * the given key
-   * @deprecated This exception-raising method has been replaced by the
-   * default-taking method.
-   */
-  WPI_DEPRECATED(
-      "Raises an exception if key not found; "
-      "use GetBoolean(StringRef key, bool defaultValue) instead")
-  virtual bool GetBoolean(llvm::StringRef key) const = 0;
 
   /**
    * Gets the boolean associated with the given name. If the key does not
@@ -482,6 +446,11 @@ class ITable {
    * @param listener the listener to be removed
    */
   virtual void RemoveTableListener(ITableListener* listener) = 0;
+
+  /**
+   * Gets the full path of this table.
+   */
+  virtual llvm::StringRef GetPath() const = 0;
 };
 
-#endif  // ITABLE_H_
+#endif  // NTCORE_TABLES_ITABLE_H_

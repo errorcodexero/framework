@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,19 +7,20 @@
 
 #pragma once
 
-#include <string>
+#include <llvm/Twine.h>
 
 #include "Commands/Command.h"
 
 namespace frc {
 
 /**
- * A {@link TimedCommand} will wait for a timeout before finishing.
- * {@link TimedCommand} is used to execute a command for a given amount of time.
+ * A TimedCommand will wait for a timeout before finishing.
+ *
+ * TimedCommand is used to execute a command for a given amount of time.
  */
 class TimedCommand : public Command {
  public:
-  TimedCommand(const std::string& name, double timeout);
+  TimedCommand(const llvm::Twine& name, double timeout);
   explicit TimedCommand(double timeout);
   virtual ~TimedCommand() = default;
 

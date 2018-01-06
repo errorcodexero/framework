@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,8 +9,9 @@
 
 #include <set>
 
+#include <support/mutex.h>
+
 #include "ErrorBase.h"
-#include "HAL/cpp/priority_mutex.h"
 
 namespace frc {
 
@@ -30,20 +31,26 @@ class MotorSafetyHelper : public ErrorBase {
   static void CheckMotors();
 
  private:
-  // the expiration time for this object
+  // The expiration time for this object
   double m_expiration;
-  // true if motor safety is enabled for this motor
+
+  // True if motor safety is enabled for this motor
   bool m_enabled;
-  // the FPGA clock value when this motor has expired
+
+  // The FPGA clock value when this motor has expired
   double m_stopTime;
-  // protect accesses to the state for this object
-  mutable priority_recursive_mutex m_syncMutex;
-  // the object that is using the helper
+
+  // Protect accesses to the state for this object
+  mutable wpi::mutex m_thisMutex;
+
+  // The object that is using the helper
   MotorSafety* m_safeObject;
+
   // List of all existing MotorSafetyHelper objects.
   static std::set<MotorSafetyHelper*> m_helperList;
-  // protect accesses to the list of helpers
-  static priority_recursive_mutex m_listMutex;
+
+  // Protect accesses to the list of helpers
+  static wpi::mutex m_listMutex;
 };
 
 }  // namespace frc

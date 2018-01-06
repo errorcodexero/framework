@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,8 +9,9 @@
 
 #include <memory>
 
+#include <HAL/Types.h>
+
 #include "AnalogTriggerOutput.h"
-#include "HAL/Types.h"
 #include "SensorBase.h"
 
 namespace frc {
@@ -23,7 +24,7 @@ class AnalogTrigger : public SensorBase {
  public:
   explicit AnalogTrigger(int channel);
   explicit AnalogTrigger(AnalogInput* channel);
-  virtual ~AnalogTrigger();
+  ~AnalogTrigger() override;
 
   void SetLimitsVoltage(double lower, double upper);
   void SetLimitsRaw(int lower, int upper);
@@ -34,6 +35,8 @@ class AnalogTrigger : public SensorBase {
   bool GetTriggerState();
   std::shared_ptr<AnalogTriggerOutput> CreateOutput(
       AnalogTriggerType type) const;
+
+  void InitSendable(SendableBuilder& builder) override;
 
  private:
   int m_index;

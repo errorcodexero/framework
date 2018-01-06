@@ -1,3 +1,247 @@
+Phoenix Framework 5.1.3 Installer (Jan 04 2018):
+	Class Libraries (FRC C++ 2018_v10/Java 2018_v13): Updated Documentation
+	Class Libraries (FRC C++ 2018_v10/Java 2018_v13): Removed Framework (Drive/Mechanical/Motion) classes from library to prevent confusion.
+					      These will be re-added in a mid-season update.
+	Class Library (FRC LabVIEW 2018_v11): Removed Framework (Drive/Mechanical/Motion) VIs from the installation to prevent confusion.  
+					      These will be re-added in a mid-season update.
+	Class Library (FRC LabVIEW 2018_v11): Fixed CANifier GetPWMInput VI.
+	Class Library (FRC LabVIEW 2018_v11): Current Control Mode set changed from milliAmps to Amps to match C++/Java and examples.
+Phoenix Framework 5.1.2 Installer (Jan 04 2018):
+	Class Library (FRC Java 2018_v12): Fixed issue where getInverted/setInverted in WPI_TalonSRX/VictorSPX were recursing.
+Phoenix Framework 5.1.1 Installer (Jan 04 2018)
+	Installer (Phoenix Framework 5.1.1.0): RobotBuilder files are now properly removed when uninstaller is run.
+	Installer (Phoenix Framework 5.1.1.0): Fixed RobotBuilder include for Victor SPX.
+	Class Library (FRC LabVIEW 2018_v10): Device ID inputs are now required for Open VIs.
+Phoenix Framework 5.1.0 Installer (Jan 04 2018)
+	Installer (Phoenix Framework 5.1.0.0): Now installs a LabVIEW example findable with the LabVIEW example finder.
+	Lifeboat (v0.9.10.0): Updated FRC roboRIO page.
+	Class Library (FRC CCI 2018_v11): New feature specific error messages.
+	Class Library (FRC C++ 2018_v9): Pigeon getFusedHeading now properly returns Fused Heading.
+	Class Library (FRC Java 2018_v11): Pigeon getFusedHeading(FusionStatus) now null checks the FusionStatus object.
+	Class Library (FRC Java 2018_v11): setControl/StatusFramePeriod methods now support int arguments.
+	Class Library (FRC Java 2018_v11): Added CANTalon wrapper for TalonSRX. 
+					   It is deprecated and should not be used - it is present to help bridge users over to TalonSRX.
+	Class Libraries (FRC C++ 2018_v9/Java 2018_v11): getWPISpeedController() has been removed.
+			Instead, new classes (WPI_TalonSRX and WPI_VictorSPX) have been added.
+			These classes extend their non-"WPI_" counterparts and also implement
+				SpeedController, Sendable, and MotorSafety from WPILib.
+			Phoenix RobotBuilder files have been updated to reflect this.
+	Class Library (FRC LabVIEW 2018_v9): CANifier/Pigeon at parity with C++/Java.
+	Class Library (FRC LabVIEW 2018_v9): Added VI to set the duration of motion trajectory points.
+	Class Library (FRC LabVIEW 2018_v9): Fixed spelling errors.
+	Class Library (FRC LabVIEW 2018_v9): If library call node in Open VIs report file-not-found, user is given an error message to install Phoenix.
+	libfrccanfirmwareupdate.so (2018_1_1): Now supports CANifier, Victor SPX, and new Talon SRX features.
+	Talon SRX/Victor SPX Firmware (2.129): Tachometer signal supported
+	Talon SRX/Victor SPX Firmware (2.130): Motor output percent reported as zero when within deadband.
+	Talon SRX/Victor SPX Firmware (3.1): Firmware build for Kickoff.  This is the official minimum version for 2018.
+Phoenix Framework 5.0.9 Installer (Dec 29 2017)
+	Class Library (FRC C++ 2018_Beta_v8): Adds Sendable/LiveWindow to WPILibSpeedController.
+	Class Library (FRC C++ 2018_Beta_v8): Removed single-parameter set().  This was a placeholder pre-WPILibSpeedController.
+	Class Library (FRC Java 2018_Beta_v10): Adds Sendable/LiveWindow to WPILibSpeedController.
+	Class Library (FRC Java 2018_Beta_v10): Removed single-parameter set().  This was a placeholder pre-WPILibSpeedController.
+	Class Library (FRC Java 2018_Beta_v10): Fixed ConfigSelectedFeedbackSensor.
+	Class Library (FRC LabVIEW 2018_Beta_v8): Fixed Motor Control Set VI.  Non-PercentOutput setpoints are no longer improperly coerced to (-1,1).
+Phoenix Framework 5.0.8 Installer (Dec 27 2017)
+	Installer (Phoenix Framework 5.0.8.0): Updates RobotBuilder files for TalonSRX, VictorSPX, PigeonIMU, and CANifier
+	Class Library (FRC CCI 2018_Beta_v9): Phoenix will now report to DS when firmware is too old.
+	Class Library (FRC CCI 2018_Beta_v9): Low-level support for remote limit switches added.
+	Class Library (FRC CCI 2018_Beta_v9): DS messages now sent appropriately for all languages.
+	Class Library (FRC CCI 2018_Beta_v9): Fixed issue that could cause roboRIO LabVIEW runtime to crash when deploying/running a LabVIEW project.
+	Class Library (FRC CCI 2018_Beta_v9): ctre.h removed
+	Class Library (FRC C++ 2018_Beta_v7): Added setStatus/Control Frame period for CANifier.
+	Class Library (FRC C++ 2018_Beta_v7): Added remote limit switch API.
+	Class Library (FRC C++ 2018_Beta_v7): Adds TalonSRX sensor collection getters (quadrature, pulse-width, etc.)
+	Class Library (FRC Java 2018_Beta_v9): Added setStatus/Control Frame period for CANifier.
+	Class Library (FRC Java 2018_Beta_v9): Added remote limit switch API.
+	Class Library (FRC Java 2018_Beta_v9): Adds TalonSRX sensor collection getters (quadrature, pulse-width, etc.)
+	Class Library (FRC LabVIEW 2018_Beta_v7): Updated to match latest C++/Java
+	Class Library (FRC LabVIEW 2018_Beta_v7): Fixed issue where control frame for motor controller would sometimes not be sent until Set was called.
+	Class Library (FRC LabVIEW 2018_Beta_v7): Added remote limit switch API.
+	Class Library (FRC LabVIEW 2018_Beta_v7): Enable and config for soft limits separated into two VIs.
+	Class Library (FRC LabVIEW 2018_Beta_v7): Error numbers should no longer conflict with standard LabVIEW error numbers.
+	Class Library (FRC LabVIEW 2018_Beta_v7): Adds TalonSRX sensor collection getters (quadrature, pulse-width, etc.)
+	Talon SRX Firmware (2.128): New current limiting features now supported.
+	Talon SRX/Victor SPX Firmware (2.128): New Voltage Compensation feature now supported
+	Talon SRX/Victor SPX Firmware (2.128): Now supports remote limit switches
+	Talon SRX/Victor SPX Firmware (2.128): Soft Limit override now works.
+	Talon SRX/Victor SPX Firmware (2.128): Fixes configPeakOutputForward/Reverse to work in open-loop modes.
+	CANifier Firmware (0.40): Now supports remote limit switches/remote sensors
+	Pigeon IMU Firmware (0.41): Now supports remote sensors
+Phoenix Framework 5.0.7 Installer (Dec 15 2017)
+	Class Library (FRC CCI 2018_Beta_v8): Fixes thread closing implementation that prevented subsequent LabVIEW code deploys.
+Phoenix Framework 5.0.6 Installer (Dec 08 2017)
+	Lifeboat (v0.9.9.9): Fixes Rio upgrade process for Beta 4.
+	Installer (Phoenix Framework 5.0.6.0): Fixes issue where LabVIEW menu files overwrote third party palette menus.
+	Class Library (FRC CCI 2018_Beta_v7): Enabled reporting to driver station for Java.
+	Class Library (FRC C++ 2018_Beta_v6): Added Victor SPX.
+	Class Library (FRC C++ 2018_Beta_v6): Added Sequential Scheduler.
+	Class Library (FRC Java 2018_Beta_v8): Added Victor SPX.
+	Class Library (FRC Java 2018_Beta_v8): Enabled error reporting to driver station.
+	Class Library (FRC LabVIEW 2018_Beta_v6): Added Victor SPX.
+	Class Library (FRC LabVIEW 2018_Beta_v6): Fixed config reverse limit short name in palette.
+	Class Library (FRC LabVIEW 2018_Beta_v6): Voltage compensation enable is now  separate from config.
+	Class Library (FRC LabVIEW 2018_Beta_v6): Soft limit enable is now separate from config.
+	Class Library (FRC LabVIEW 2018_Beta_v6): Closed-loop data (closed-loop error, derivative, and iaccum) and set iaccum now take optional pidLoopIdx parameter.
+	Class Library (FRC LabVIEW 2018_Beta_v6): Fixed missing input terminal on a few VIs.
+	Class Library (FRC LabVIEW 2018_Beta_v6): Subpalette icons updated.
+	libfrccanfirmwareupdate.so (2017_12_7): Fixed to work with Beta 4.
+Phoenix Framework 5.0.5 Installer (Nov 30 2017)
+	Lifeboat (v0.9.9.6): wpiutil removed.
+	Lifeboat (v0.9.9.6): User is prompted after updating RIO web plugin and library.
+	Installer (Phoenix Framework 5.0.5.0): LabVIEW files now placed in Install Directory instead of LV directory.  
+						Menu files are placed in LV directory.
+	Class Library (FRC CCI 2018_Beta_v6): Changed to use new Talon SRX firmware and CAN framing.
+	Class Library (FRC CCI 2018_Beta_v6): CCI changed to use generic MotController C functions instead of TalonSRX.
+	Class Library (FRC C++ 2018_Beta_v5): Added BaseMotorController, which uses new CCI functions.
+	Class Library (FRC Java 2018_Beta_v6):  Added BaseMotorController, which uses new CCI functions.
+	Class Library (FRC Java 2018_Beta_v7:  User facing java functions are lowerCamelCase.
+	Class Library (FRC LabVIEW 2018_Beta_v5): TalonSRX VIs have been redone.  They now use the new CCI and beta Talon firmware.
+	Class Library (HERO SDK CTRE.dll 4.4.0.29): Fixes to EEPROM class.
+	Class Library (HERO SDK CTRE.dll 4.4.0.29): NeutralMode Enum for motor controllers fixed.
+	libfrccanfirmwareupdate.so (2017_11_19): Robustness improvement when there are many common-ID devices.
+	libfrccanfirmwareupdate.so (2017_11_19): Blink LED is used to clear sticky faults.  Self-test documents this.
+	libfrccanfirmwareupdate.so (2017_11_19): Added Victor SPX support.
+	
+	This release contains several new features/concepts.  The following are the most prominent.
+		Invert/Reverse strategy has been improved considerably.  There are only two functions: SetInvert(bool) and SetSensorPhase(bool).
+			If using closedloop/soft-limit features in a CTRE motor controller, select SetSensorPhase(bool) to ensure positive output yields positive sensor postion.
+
+			User can set SetInvert() to whatever they want.  This invert selection goes to the firmware and affects all control modes.  
+			
+			When SetInvert(true) is set, the motor controller LEDs will change orientation.  For example, green will represent positive voltage on the M- wire when SetInvert(true).
+			This is done to guarantee the following...
+			- Green LEDs on Talon/Victor means forward-limit-switch is in effect regardless of Invert selection.
+			- Green LEDs on Talon/Victor means forward-soft-limit is in effect regardless of Invert selection.
+			- Green LEDs on Talon/Victor means selected output is positive (closed-loop output positive or robot controller set positive motor percent output).
+			
+			User can change SetInvert() without having to modify the SetSensorPhase() selection.  Once sensor is in phase, you can SetInvert() true or false.
+			
+		Voltage Control Mode is removed.  This is being replaced with a EnableVoltageCompensation setting that can be enabled/disabled with any control Mode.
+		Various CAN frames have been changed and impact the frame divisions in SetStatusFramePeriod.
+		WPI Speed Controller compliant objects can be retrieved via GetWPI_SpeedController().
+		PigeonImu => PigeonIMU
+		SetStatusFrameRate => SetStatusFramePeriod()
+		New Follow API/VI so that Victor SPX can follow Talon SRX and vice versa.  The Set() API can still be used to pick the master if the master is the same model as follower.
+		Set() is two parameters now.  Caller specifies the control-mode and the set-point/output.  This is far better and produces cleaner robot logic.
+		Deadband can be changed.
+		Various CAN frame changes for reduced CPU and CAN use.
+		Various changes to CAN frames for pending future features (IMU/Differential sensor/casdcaded close loops/etc).
+		Two pecent ramps, one for open-loop and one for closed-loop.  This way robot application does not need to switch ramp when changing control mode.
+		
+	Known Limitations:  
+		Robot API: Victor SPX class is not available yet.  This will be added to next release.
+		Robot API: Motion Profile not available as it is being reworked to include remote sensor concept and robot heading.
+		Robot API: Fault API was not fully tested for this release.
+		Robot API: GetLastError() and DS Error reporting does not work under all contexts.  Fixes for this will be merged into next release.
+		Robot API: Remote Limit Switches not supported yet (Source:CANifer/Talon SRX).
+		Robot API: Remote Sensor selection not supported yet. (Source:CANifer/Talon SRX).
+		Robot API: SRX Current limit API not functional yet.  This is being reworked to include peak and continuous thresholds.
+		Robot API: Talon/CANifier Tachometer not functional below 4000RPM.  This will be improved in future Talon/CANifier release.  This also means improved pulse width decode.
+		Robot API: TimePercent control mode does nothing currently.
+		Web-based config: CANifier Self-test is not supported yet.
+		Web-based config: CANifier blink LED will report an error, but device will blink correctly.
+		ConfigPeakOutputForward/Reverse only impacts closed-loopds.
+		
+	
+Phoenix Framework 5.0.4.4 Installer (Oct 27 2017)
+	Lifeboat (v0.9.9.5): wpiutil now copied over as part of roboRIO Upgrade process.  Library will not link in LabVIEW without this.
+Phoenix Framework 5.0.4.3 Installer (Oct 27 2017)
+	Lifeboat (v0.9.9.4): roboRIO upgrade process now places libfrccanfirmwareupdate.so that has been built for specific rio image (2017 v 2018)
+	libfrccanfirmwareupdate.so (2017_27_10): Rebuilt for 2018 image.
+Phoenix Framework 5.0.4.2 Installer (Oct 20 2017)
+	Installer (Phoenix Framework 5.0.4.2): Places LabVIEW VIs in correct folder.
+	Installer (Phoenix Framework 5.0.4.2): Now prevents installation of ANY Hero C# components if VS 2017 is not installed.
+	Lifeboat (v0.9.9.3): Fixes issue that would cause LifeBoat to crash on start.
+Phoenix Framework 5.0.4.1 Installer (Oct 15 2017)
+	Installer (Phoenix Framework 5.0.4.1): Fixes an issue where C++ header files were missing.
+Phoenix Framework 5.0.4.0 Installer (Oct 13 2017)
+	Installer (Phoenix Framework 5.0.4.0): Releases appended with -FOR_BETA_ONLY have *.so and *.a files compiled 
+						using the 2018 FRC gcc toolchain.  All other releases are built using the 2017 toolchain.
+	Class Library (FRC CCI 2018_Alpha_v4): Binary name changed to libCTRE_PhoenixCCI
+	Class Library (FRC C++ 2018_Alpha_v4): CANifier class added.
+	Class Library (FRC C++ 2018_Alpha_v4): Tasking/Scheduler Classes and Utilities added.
+	Class Library (FRC C++ 2018_Alpha_v4) AND
+	Class Library (FRC Java 2018_Alpha_v5):
+				- Namespaces have been restructured. All classes are now in com.ctre.phoenix(Java) or CTRE::Phoenix::(C++) namespace
+				- CANTalon renamed to TalonSRX in the MotorControl.CAN namespace.
+				- PigeonImu moved to Sensors namespace.
+				- Output binaries and jars have been renamed to CTRE_Phoenix*
+	Class Library (FRC LabVIEW 2018_Alpha_v4): CANifier VIs added
+	Class Library (FRC LabVIEW 2018_Alpha_v4): GetStatus VIs no longer missing
+	Class Library (HERO SDK CTRE.dll 4.4.0.28): Namespace restructure similar to Java/C++.  Binaries are still named CTRE.dll
+	Lifeboat (v0.9.9.2): Now copies libCTRE_PhoenixCCI.so to roboRIO instead of old shared object.
+	KNOWN ISSUES:
+		- The Phoenix Logger (and Error Reporting for FRC C++/Java) is temporarily disabled.
+		- LiveWindow capability for FRC C++/Java is temporarily unavailable.
+Phoenix Toolsuite 5.0.3.3 Installer (Sept 27 2017)
+	Class Library (FRC LabVIEW 2018_Alpha_v3): New attempt at repacking VIs, some VIs didn't package in previous build.
+Phoenix Toolsuite 5.0.3.2 Installer (Sept 23 2017)
+	Class Library (HERO SDK CTRE.dll 4.4.0.27): CANifier class added.
+	Class Library (HERO SDK CTRE.dll 4.4.0.27): Copyright date changed to 2017.
+	libfrccanfirmwareupdate.so (2017_22_9): Added CANifier to RIO web-based config.
+	Lifeboat (v0.9.9.1):  Added CANifier to HERO LifeBoat.
+	Lifeboat (v0.9.9.1):  HERO LifeBoat has left pane folder shortcut in CRF browser for firmware files.
+	Class Library (FRC CCI 2018_Alpha_v4): Get Motion Profile Active Trajectory Position and Velocity do not support negative values.
+	Class Library (FRC Java 2018_Alpha_v4): CANifier classes added.
+CTRE Toolsuite 5.0.2.1 Installer (Sept 15 2017)
+	Class Library (HERO SDK CTRE.dll 4.4.0.26): Fixed issue where library was built using wrong native dll and couldn't be deployed.
+CTRE Toolsuite 5.0.2.0 Installer (Sept 15 2017)
+	Installer (CTRE Toolsuite 5.0.2.0): Fixed spelling issue.
+	Installer (CTRE Toolsuite 5.0.2.0): FRC CCI version now included in version notes.
+	Class Library (HERO SDK CTRE.dll 4.4.0.25): Display Module class now correctly uses given port instead of always using Port 8.
+	Class Library (FRC LabVIEW 2018_Alpha_v2): Added Servo Class VIs (including servo execution blocking VI)
+	Class Library (FRC LabVIEW 2018_Alpha_v2): Fixed issue where a few Pigeon VIs were not updated to use CCI.
+	Class Library (FRC LabVIEW 2018_Alpha_v2): Uses CCI Logger to capture generated errors.
+	Class Library (FRC C++ 2018_Alpha_v3): Uses CCI Logger to capture generated errors.
+	Class Library (FRC Java 2018_Alpha_v3): Implemented Tasking features
+	Class Library (FRC Java 2018_Alpha_v3): Sensored Gearbox GetPosition() now returns in units of Rotations.
+	Class Library (FRC Java 2018_Alpha_v3): Removed Unit scaling from SmartMotorController (unit scaling is now done in gearboxes/drivetrain instead of in motor controllers)
+	Class Library (FRC Java 2018_Alpha_v3): Updated Servo Params
+	Class Library (FRC Java 2018_Alpha_v3): Uses CCI Logger to capture generated errors.
+	Class Library (FRC CCI 2018_Alpha_v3): Added Logger to log CTRE data to file and FRC DS.
+	Class Library (FRC CCI 2018_Alpha_v3): CCI now checks handle pointers to make sure object exists.
+	HERO Firmware (v1.0.1.0): Fixed issue where ~60ms of delay occured in HERO when USB port not occupied.  (Issue #63)
+	HERO Examples: Fixed issue where CTRE.dll reference path was incorrect
+	HERO Examples: Updated comments to correct minimum SDK version number
+	KNOWN ISSUE:	
+		CTRE dll was built using wrong native dll and can't be deployed.
+CTRE Toolsuite 5.0.1.0 Installer (Aug 11 2017)
+	Installer (CTRE Toolsuite 5.0.1.0): Now removes any previous LabVIEW VIs before installing new ones.
+	Class Library (HERO SDK CTRE.dll 4.4.0.24): Addition of Phoenix Framework.
+	Class Library (HERO SDK CTRE.dll 4.4.0.24): Update to ESP12F Wifi class.
+	Class Library (HERO SDK CTRE.dll 4.4.0.24): Examples are now properly installed for VS2017.
+	Class Library (HERO SDK CTRE.dll 4.4.0.24): Examples have been updated to reflect Phoenix.
+	Class Library (FRC C++ 2018_Alpha_v2): Addition of Motion and Servo classes for Phoenix Framework.
+	Class Library (FRC C++ 2018_Alpha_v2): CANTalon is now in MotorControllers package.
+	Class Library (FRC Java 2018_Alpha_v2): Addition of Motion and Servo classes for Pheoenix Framework.
+	Class Library (FRC Java 2018_Alpha_v2): CANTalon is now in MotorControllers package.
+CTRE Toolsuite 5.0.0.2 Installer (Aug 01 2017)
+	Installer (CTRE Toolsuite 5.0.0.2): Fixes Issue with VS2017 path detection
+	Installer (CTRE Toolsuite 5.0.0.2): Fixes issues where PigeonImu.h was not installed
+CTRE Toolsuite 5.0.0.1 Installer
+	Installer (CTRE Toolsuite 5.0.0.1): Fixes issue where unneccesary header files are included.
+	Installer (CTRE Toolsuite 5.0.0.1): Fixes issue where installation failed for VS 2017
+	Installer (CTRE Toolsuite 5.0.0.1): Fixes issue where examples couldn't be installed for VS 2017
+	Class Library (FRC C++ 2018_Alpha_v1): CanTalon and PigeonImu now utilize new CCI interface to low-level.
+	Class Library (FRC Java 2018_Alpha_v1): CanTalon and PigeonImu now utilize new CCI interface to low-level.
+	Class Library (FRC CCI 2018_Alpha_v2): Fixes Issues #1, 2, 3, 4, 6, 7, 8.
+CTRE Toolsuite 5.0.0.0 Installer
+	Installer (CTRE Toolsuite 5.0.0.0): Updated for use with Visual Studio 2017
+	Class Library (FRC LabVIEW 2018_Alpha_v1): Changed VIs to use CCI rather than own implementation
+	Class Library (FRC CCI 2018_Alpha_v1): C-style API for utilizing talon and pigeon
+	Class Library (HERO Native 1.10.0.0): Added IOControl
+	HERO Firmware (v1.0.0.0): Added IOControl
+	Lifeboat (v0.9.8.0): RoboRIO update now moves CCI Shared Object to roboRIO
+	NOTE: Lifeboat version same as previous version
+CTRE Toolsuite 4.4.1.14 Installer
+	Installer (CTRE Toolsuite 4.4.1.14): Fixed issue where files in wpilib/user weren't being removed on uninstall. (installer issue #1)
+	Class Library (FRC C++ 2017_v7): Moved all header files to 'ctrlib' directory.  When using CANTalon or PigeonImu, you must now put 'ctrlib/' as a prefix to the header file in the include statement.
+CTRE Toolsuite 4.4.1.13 Installer
+	Class Library (FRC Java 2017_v6): Added API to access Talon SRX Data Port Output functionality.
+	Class Library (FRC C++ 2017_v6): Added API to access Talon SRX Data Port Output functionality.
+	Class Library (HERO SDK CTRE.dll 4.4.0.23): Added API to access Talon SRX Data Port Output functionality.
+	NOTE: The Talon SRX Firmware supporting the above features is not packaged with this installer.
+		It can be found in the CTRE Github repository with example projects for the data port output feature.
 CTRE Toolsuite 4.4.1.12 Installer
 	CTRE Toolsuite 4.4.1.12 Installer
 	Talon SRX Firmware (2.34): Minor modification to start up frame.  This will allow for future features (such as ESD detection).  This will not impact any current use case of the Talon SRX.

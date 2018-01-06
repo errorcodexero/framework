@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2014-2017. All Rights Reserved.                        */
+/* Copyright (c) 2014-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,23 +7,27 @@
 
 #pragma once
 
+#include <stdint.h>
+
 #include <atomic>
 #include <memory>
-#include <mutex>
 #include <string>
 #include <vector>
 
+#include <llvm/DenseMap.h>
+#include <llvm/StringMap.h>
+#include <llvm/StringRef.h>
+#include <networktables/NetworkTable.h>
+#include <support/mutex.h>
+
 #include "ErrorBase.h"
 #include "cscore.h"
-#include "llvm/DenseMap.h"
-#include "llvm/StringMap.h"
-#include "llvm/StringRef.h"
-#include "networktables/NetworkTable.h"
 
 namespace frc {
 
 /**
  * Singleton class for creating and keeping camera servers.
+ *
  * Also publishes camera information to NetworkTables.
  */
 class CameraServer : public ErrorBase {
@@ -38,25 +42,26 @@ class CameraServer : public ErrorBase {
    */
   static CameraServer* GetInstance();
 
+#ifdef __linux__
+  // USBCamera does not work on anything except Linux.
   /**
    * Start automatically capturing images to send to the dashboard.
    *
-   * <p>You should call this method to see a camera feed on the dashboard.
-   * If you also want to perform vision processing on the roboRIO, use
-   * getVideo() to get access to the camera images.
+   * You should call this method to see a camera feed on the dashboard. If you
+   * also want to perform vision processing on the roboRIO, use getVideo() to
+   * get access to the camera images.
    *
-   * The first time this overload is called, it calls
-   * {@link #StartAutomaticCapture(int)} with device 0, creating a camera
-   * named "USB Camera 0".  Subsequent calls increment the device number
-   * (e.g. 1, 2, etc).
+   * The first time this overload is called, it calls StartAutomaticCapture()
+   * with device 0, creating a camera named "USB Camera 0".  Subsequent calls
+   * increment the device number (e.g. 1, 2, etc).
    */
   cs::UsbCamera StartAutomaticCapture();
 
   /**
    * Start automatically capturing images to send to the dashboard.
    *
-   * <p>This overload calls {@link #StartAutomaticCapture(String, int)} with
-   * a name of "USB Camera {dev}".
+   * This overload calls StartAutomaticCapture() with a name of "USB Camera
+   * {dev}".
    *
    * @param dev The device number of the camera interface
    */
@@ -66,7 +71,7 @@ class CameraServer : public ErrorBase {
    * Start automatically capturing images to send to the dashboard.
    *
    * @param name The name to give the camera
-   * @param dev The device number of the camera interface
+   * @param dev  The device number of the camera interface
    */
   cs::UsbCamera StartAutomaticCapture(llvm::StringRef name, int dev);
 
@@ -78,6 +83,7 @@ class CameraServer : public ErrorBase {
    */
   cs::UsbCamera StartAutomaticCapture(llvm::StringRef name,
                                       llvm::StringRef path);
+#endif
 
   /**
    * Start automatically capturing images to send to the dashboard from
@@ -90,8 +96,7 @@ class CameraServer : public ErrorBase {
   /**
    * Adds an Axis IP camera.
    *
-   * <p>This overload calls {@link #AddAxisCamera(String, String)} with
-   * name "Axis Camera".
+   * This overload calls AddAxisCamera() with name "Axis Camera".
    *
    * @param host Camera host IP or DNS name (e.g. "10.x.y.11")
    */
@@ -100,8 +105,7 @@ class CameraServer : public ErrorBase {
   /**
    * Adds an Axis IP camera.
    *
-   * <p>This overload calls {@link #AddAxisCamera(String, String)} with
-   * name "Axis Camera".
+   * This overload calls AddAxisCamera() with name "Axis Camera".
    *
    * @param host Camera host IP or DNS name (e.g. "10.x.y.11")
    */
@@ -110,8 +114,7 @@ class CameraServer : public ErrorBase {
   /**
    * Adds an Axis IP camera.
    *
-   * <p>This overload calls {@link #AddAxisCamera(String, String)} with
-   * name "Axis Camera".
+   * This overload calls AddAxisCamera() with name "Axis Camera".
    *
    * @param host Camera host IP or DNS name (e.g. "10.x.y.11")
    */
@@ -120,8 +123,7 @@ class CameraServer : public ErrorBase {
   /**
    * Adds an Axis IP camera.
    *
-   * <p>This overload calls {@link #AddAxisCamera(String, String[])} with
-   * name "Axis Camera".
+   * This overload calls AddAxisCamera() with name "Axis Camera".
    *
    * @param hosts Array of Camera host IPs/DNS names
    */
@@ -130,8 +132,7 @@ class CameraServer : public ErrorBase {
   /**
    * Adds an Axis IP camera.
    *
-   * <p>This overload calls {@link #AddAxisCamera(String, String[])} with
-   * name "Axis Camera".
+   * This overload calls AddAxisCamera() with name "Axis Camera".
    *
    * @param hosts Array of Camera host IPs/DNS names
    */
@@ -247,8 +248,8 @@ class CameraServer : public ErrorBase {
   /**
    * Get server for the primary camera feed.
    *
-   * <p>This is only valid to call after a camera feed has been added
-   * with StartAutomaticCapture() or AddServer().
+   * This is only valid to call after a camera feed has been added with
+   * StartAutomaticCapture() or AddServer().
    */
   cs::VideoSink GetServer();
 
@@ -279,7 +280,7 @@ class CameraServer : public ErrorBase {
    * StartAutomaticCapture method.
    *
    * @deprecated Use SetResolution on the UsbCamera returned by
-   *     StartAutomaticCapture() instead.
+   *             StartAutomaticCapture() instead.
    * @param size The size to use
    */
   void SetSize(int size);
@@ -287,20 +288,20 @@ class CameraServer : public ErrorBase {
  private:
   CameraServer();
 
-  std::shared_ptr<ITable> GetSourceTable(CS_Source source);
+  std::shared_ptr<nt::NetworkTable> GetSourceTable(CS_Source source);
   std::vector<std::string> GetSinkStreamValues(CS_Sink sink);
   std::vector<std::string> GetSourceStreamValues(CS_Source source);
   void UpdateStreamValues();
 
   static constexpr char const* kPublishName = "/CameraPublisher";
 
-  std::mutex m_mutex;
+  wpi::mutex m_mutex;
   std::atomic<int> m_defaultUsbDevice;
   std::string m_primarySourceName;
   llvm::StringMap<cs::VideoSource> m_sources;
   llvm::StringMap<cs::VideoSink> m_sinks;
-  llvm::DenseMap<CS_Source, std::shared_ptr<ITable>> m_tables;
-  std::shared_ptr<NetworkTable> m_publishTable;
+  llvm::DenseMap<CS_Source, std::shared_ptr<nt::NetworkTable>> m_tables;
+  std::shared_ptr<nt::NetworkTable> m_publishTable;
   cs::VideoListener m_videoListener;
   int m_tableListener;
   int m_nextPort;

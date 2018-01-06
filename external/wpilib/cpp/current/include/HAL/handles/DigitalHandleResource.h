@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -12,10 +12,11 @@
 #include <array>
 #include <memory>
 
+#include <support/mutex.h>
+
 #include "HAL/Errors.h"
 #include "HAL/Types.h"
 #include "HAL/cpp/make_unique.h"
-#include "HAL/cpp/priority_mutex.h"
 #include "HAL/handles/HandlesInternal.h"
 
 namespace hal {
@@ -33,7 +34,7 @@ namespace hal {
  *
  */
 template <typename THandle, typename TStruct, int16_t size>
-class DigitalHandleResource {
+class DigitalHandleResource : public HandleBase {
   friend class DigitalHandleResourceTest;
 
  public:
@@ -44,10 +45,11 @@ class DigitalHandleResource {
   THandle Allocate(int16_t index, HAL_HandleEnum enumValue, int32_t* status);
   std::shared_ptr<TStruct> Get(THandle handle, HAL_HandleEnum enumValue);
   void Free(THandle handle, HAL_HandleEnum enumValue);
+  void ResetHandles() override;
 
  private:
   std::array<std::shared_ptr<TStruct>, size> m_structures;
-  std::array<priority_mutex, size> m_handleMutexes;
+  std::array<wpi::mutex, size> m_handleMutexes;
 };
 
 template <typename THandle, typename TStruct, int16_t size>
@@ -58,25 +60,25 @@ THandle DigitalHandleResource<THandle, TStruct, size>::Allocate(
     *status = RESOURCE_OUT_OF_RANGE;
     return HAL_kInvalidHandle;
   }
-  std::lock_guard<priority_mutex> sync(m_handleMutexes[index]);
+  std::lock_guard<wpi::mutex> lock(m_handleMutexes[index]);
   // check for allocation, otherwise allocate and return a valid handle
   if (m_structures[index] != nullptr) {
     *status = RESOURCE_IS_ALLOCATED;
     return HAL_kInvalidHandle;
   }
   m_structures[index] = std::make_shared<TStruct>();
-  return static_cast<THandle>(hal::createHandle(index, enumValue));
+  return static_cast<THandle>(hal::createHandle(index, enumValue, m_version));
 }
 
 template <typename THandle, typename TStruct, int16_t size>
 std::shared_ptr<TStruct> DigitalHandleResource<THandle, TStruct, size>::Get(
     THandle handle, HAL_HandleEnum enumValue) {
   // get handle index, and fail early if index out of range or wrong handle
-  int16_t index = getHandleTypedIndex(handle, enumValue);
+  int16_t index = getHandleTypedIndex(handle, enumValue, m_version);
   if (index < 0 || index >= size) {
     return nullptr;
   }
-  std::lock_guard<priority_mutex> sync(m_handleMutexes[index]);
+  std::lock_guard<wpi::mutex> lock(m_handleMutexes[index]);
   // return structure. Null will propogate correctly, so no need to manually
   // check.
   return m_structures[index];
@@ -86,10 +88,19 @@ template <typename THandle, typename TStruct, int16_t size>
 void DigitalHandleResource<THandle, TStruct, size>::Free(
     THandle handle, HAL_HandleEnum enumValue) {
   // get handle index, and fail early if index out of range or wrong handle
-  int16_t index = getHandleTypedIndex(handle, enumValue);
+  int16_t index = getHandleTypedIndex(handle, enumValue, m_version);
   if (index < 0 || index >= size) return;
   // lock and deallocated handle
-  std::lock_guard<priority_mutex> sync(m_handleMutexes[index]);
+  std::lock_guard<wpi::mutex> lock(m_handleMutexes[index]);
   m_structures[index].reset();
+}
+
+template <typename THandle, typename TStruct, int16_t size>
+void DigitalHandleResource<THandle, TStruct, size>::ResetHandles() {
+  for (int i = 0; i < size; i++) {
+    std::lock_guard<wpi::mutex> lock(m_handleMutexes[i]);
+    m_structures[i].reset();
+  }
+  HandleBase::ResetHandles();
 }
 }  // namespace hal

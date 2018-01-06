@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,10 +8,10 @@
 #pragma once
 
 #include <chrono>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
 #include <string>
+
+#include <llvm/SmallString.h>
+#include <llvm/raw_ostream.h>
 
 inline std::string NowTime();
 
@@ -31,7 +31,7 @@ class Log {
  public:
   Log();
   virtual ~Log();
-  std::ostringstream& Get(TLogLevel level = logINFO);
+  llvm::raw_ostream& Get(TLogLevel level = logINFO);
 
  public:
   static TLogLevel& ReportingLevel();
@@ -39,7 +39,8 @@ class Log {
   static TLogLevel FromString(const std::string& level);
 
  protected:
-  std::ostringstream os;
+  llvm::SmallString<128> buf;
+  llvm::raw_svector_ostream oss{buf};
 
  private:
   Log(const Log&);
@@ -48,16 +49,18 @@ class Log {
 
 inline Log::Log() {}
 
-inline std::ostringstream& Log::Get(TLogLevel level) {
-  os << "- " << NowTime();
-  os << " " << ToString(level) << ": ";
-  os << std::string(level > logDEBUG ? level - logDEBUG : 0, '\t');
-  return os;
+inline llvm::raw_ostream& Log::Get(TLogLevel level) {
+  oss << "- " << NowTime();
+  oss << " " << ToString(level) << ": ";
+  if (level > logDEBUG) {
+    oss << std::string(level - logDEBUG, '\t');
+  }
+  return oss;
 }
 
 inline Log::~Log() {
-  os << std::endl;
-  std::cerr << os.str();
+  oss << "\n";
+  llvm::errs() << oss.str();
 }
 
 inline TLogLevel& Log::ReportingLevel() {
@@ -93,19 +96,33 @@ typedef Log FILELog;
   if (level > FILELog::ReportingLevel()) \
     ;                                    \
   else                                   \
-  Log().Get(level)
+    Log().Get(level)
 
 inline std::string NowTime() {
-  std::stringstream ss;
-  ss << std::setfill('0') << std::setw(2);
+  llvm::SmallString<128> buf;
+  llvm::raw_svector_ostream oss(buf);
 
-  using namespace std::chrono;
-  auto now = system_clock::now().time_since_epoch();
+  using std::chrono::duration_cast;
 
-  ss << duration_cast<hours>(now).count() % 24 << ":"
-     << duration_cast<minutes>(now).count() % 60 << ":"
-     << duration_cast<seconds>(now).count() % 60 << "."
-     << duration_cast<milliseconds>(now).count() % 1000;
+  auto now = std::chrono::system_clock::now().time_since_epoch();
 
-  return ss.str();
+  // Hours
+  auto count = duration_cast<std::chrono::hours>(now).count() % 24;
+  if (count < 10) oss << "0";
+  oss << count << ":";
+
+  // Minutes
+  count = duration_cast<std::chrono::minutes>(now).count() % 60;
+  if (count < 10) oss << "0";
+  oss << count << ":";
+
+  // Seconds
+  count = duration_cast<std::chrono::seconds>(now).count() % 60;
+  if (count < 10) oss << "0";
+  oss << count << ".";
+
+  // Milliseconds
+  oss << duration_cast<std::chrono::milliseconds>(now).count() % 1000;
+
+  return oss.str();
 }

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2012-2017. All Rights Reserved.                        */
+/* Copyright (c) 2012-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,81 +7,76 @@
 
 #pragma once
 
-#include <map>
 #include <memory>
-#include <string>
-#include <vector>
 
-#include "Commands/Scheduler.h"
-#include "LiveWindow/LiveWindowSendable.h"
-#include "tables/ITable.h"
+#include <llvm/Twine.h>
+#include <support/deprecated.h>
+
+#include "SmartDashboard/Sendable.h"
 
 namespace frc {
 
-struct LiveWindowComponent {
-  std::string subsystem;
-  std::string name;
-  bool isSensor = false;
-
-  LiveWindowComponent() = default;
-  LiveWindowComponent(std::string subsystem, std::string name, bool isSensor) {
-    this->subsystem = subsystem;
-    this->name = name;
-    this->isSensor = isSensor;
-  }
-};
-
 /**
  * The LiveWindow class is the public interface for putting sensors and
- * actuators
- * on the LiveWindow.
+ * actuators on the LiveWindow.
  */
 class LiveWindow {
  public:
+  LiveWindow(const LiveWindow&) = delete;
+  LiveWindow& operator=(const LiveWindow&) = delete;
+
   static LiveWindow* GetInstance();
-  void Run();
-  void AddSensor(const std::string& subsystem, const std::string& name,
-                 LiveWindowSendable* component);
-  void AddSensor(const std::string& subsystem, const std::string& name,
-                 LiveWindowSendable& component);
-  void AddSensor(const std::string& subsystem, const std::string& name,
-                 std::shared_ptr<LiveWindowSendable> component);
-  void AddActuator(const std::string& subsystem, const std::string& name,
-                   LiveWindowSendable* component);
-  void AddActuator(const std::string& subsystem, const std::string& name,
-                   LiveWindowSendable& component);
-  void AddActuator(const std::string& subsystem, const std::string& name,
-                   std::shared_ptr<LiveWindowSendable> component);
 
-  void AddSensor(std::string type, int channel, LiveWindowSendable* component);
-  void AddActuator(std::string type, int channel,
-                   LiveWindowSendable* component);
-  void AddActuator(std::string type, int module, int channel,
-                   LiveWindowSendable* component);
+  WPI_DEPRECATED("no longer required")
+  void Run() { UpdateValues(); }
 
-  bool IsEnabled() const { return m_enabled; }
+  WPI_DEPRECATED("use Sendable::SetName() instead")
+  void AddSensor(const llvm::Twine& subsystem, const llvm::Twine& name,
+                 Sendable* component);
+  WPI_DEPRECATED("use Sendable::SetName() instead")
+  void AddSensor(const llvm::Twine& subsystem, const llvm::Twine& name,
+                 Sendable& component);
+  WPI_DEPRECATED("use Sendable::SetName() instead")
+  void AddSensor(const llvm::Twine& subsystem, const llvm::Twine& name,
+                 std::shared_ptr<Sendable> component);
+  WPI_DEPRECATED("use Sendable::SetName() instead")
+  void AddActuator(const llvm::Twine& subsystem, const llvm::Twine& name,
+                   Sendable* component);
+  WPI_DEPRECATED("use Sendable::SetName() instead")
+  void AddActuator(const llvm::Twine& subsystem, const llvm::Twine& name,
+                   Sendable& component);
+  WPI_DEPRECATED("use Sendable::SetName() instead")
+  void AddActuator(const llvm::Twine& subsystem, const llvm::Twine& name,
+                   std::shared_ptr<Sendable> component);
+
+  WPI_DEPRECATED("use SensorBase::SetName() instead")
+  void AddSensor(const llvm::Twine& type, int channel, Sendable* component);
+  WPI_DEPRECATED("use SensorBase::SetName() instead")
+  void AddActuator(const llvm::Twine& type, int channel, Sendable* component);
+  WPI_DEPRECATED("use SensorBase::SetName() instead")
+  void AddActuator(const llvm::Twine& type, int module, int channel,
+                   Sendable* component);
+
+  void Add(std::shared_ptr<Sendable> component);
+  void Add(Sendable* component);
+  void AddChild(Sendable* parent, std::shared_ptr<Sendable> component);
+  void AddChild(Sendable* parent, void* component);
+  void Remove(Sendable* component);
+
+  void EnableTelemetry(Sendable* component);
+  void DisableTelemetry(Sendable* component);
+  void DisableAllTelemetry();
+
+  bool IsEnabled() const;
   void SetEnabled(bool enabled);
 
- protected:
-  LiveWindow();
-  virtual ~LiveWindow() = default;
+  void UpdateValues();
 
  private:
-  void UpdateValues();
-  void Initialize();
-  void InitializeLiveWindowComponents();
+  LiveWindow();
 
-  std::vector<std::shared_ptr<LiveWindowSendable>> m_sensors;
-  std::map<std::shared_ptr<LiveWindowSendable>, LiveWindowComponent>
-      m_components;
-
-  std::shared_ptr<ITable> m_liveWindowTable;
-  std::shared_ptr<ITable> m_statusTable;
-
-  Scheduler* m_scheduler;
-
-  bool m_enabled = false;
-  bool m_firstTime = true;
+  struct Impl;
+  std::unique_ptr<Impl> m_impl;
 };
 
 }  // namespace frc

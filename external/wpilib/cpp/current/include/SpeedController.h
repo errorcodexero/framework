@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -32,21 +32,23 @@ class SpeedController : public PIDOutput {
   virtual double Get() const = 0;
 
   /**
-  * Common interface for inverting direction of a speed controller.
-  * @param isInverted The state of inversion, true is inverted.
-  */
-  virtual void SetInverted(bool isInverted) = 0;
-  /**
-
-   * Common interface for disabling a motor.
+   * Common interface for inverting direction of a speed controller.
+   *
+   * @param isInverted The state of inversion, true is inverted.
    */
-  virtual void Disable() = 0;
+  virtual void SetInverted(bool isInverted) = 0;
 
   /**
    * Common interface for returning the inversion state of a speed controller.
+   *
    * @return isInverted The state of inversion, true is inverted.
    */
   virtual bool GetInverted() const = 0;
+
+  /**
+   * Common interface for disabling a motor.
+   */
+  virtual void Disable() = 0;
 
   /**
    * Common interface to stop the motor until Set is called again.

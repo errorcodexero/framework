@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -15,10 +15,9 @@ namespace frc {
  * listener} when the pipeline has finished to alert user code when it is safe
  * to access the pipeline's outputs.
  *
- * @param videoSource the video source to use to supply images for the pipeline
- * @param pipeline    the vision pipeline to run
- * @param listener    a function to call after the pipeline has finished
- * running
+ * @param videoSource The video source to use to supply images for the pipeline
+ * @param pipeline    The vision pipeline to run
+ * @param listener    A function to call after the pipeline has finished running
  */
 template <typename T>
 VisionRunner<T>::VisionRunner(cs::VideoSource videoSource, T* pipeline,

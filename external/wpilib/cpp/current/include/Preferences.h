@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2011-2017. All Rights Reserved.                        */
+/* Copyright (c) 2011-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,14 +7,15 @@
 
 #pragma once
 
-#include <map>
+#include <stdint.h>
+
 #include <memory>
 #include <string>
 #include <vector>
 
+#include <networktables/NetworkTable.h>
+
 #include "ErrorBase.h"
-#include "networktables/NetworkTable.h"
-#include "tables/ITableListener.h"
 
 namespace frc {
 
@@ -22,15 +23,15 @@ namespace frc {
  * The preferences class provides a relatively simple way to save important
  * values to the roboRIO to access the next time the roboRIO is booted.
  *
- * <p>This class loads and saves from a file inside the roboRIO.  The user can
- * not access the file directly, but may modify values at specific fields which
- * will then be automatically periodically saved to the file by the NetworkTable
- * server.</p>
+ * This class loads and saves from a file inside the roboRIO.  The user cannot
+ * access the file directly, but may modify values at specific fields which will
+ * then be automatically periodically saved to the file by the NetworkTable
+ * server.
  *
- * <p>This class is thread safe.</p>
+ * This class is thread safe.
  *
- * <p>This will also interact with {@link NetworkTable} by creating a table
- * called "Preferences" with all the key-value pairs.</p>
+ * This will also interact with {@link NetworkTable} by creating a table called
+ * "Preferences" with all the key-value pairs.
  */
 class Preferences : public ErrorBase {
  public:
@@ -49,9 +50,6 @@ class Preferences : public ErrorBase {
   void PutFloat(llvm::StringRef key, float value);
   void PutBoolean(llvm::StringRef key, bool value);
   void PutLong(llvm::StringRef key, int64_t value);
-  WPI_DEPRECATED(
-      "Saving is now automatically performed by the NetworkTables server.")
-  void Save();
   bool ContainsKey(llvm::StringRef key);
   void Remove(llvm::StringRef key);
 
@@ -60,16 +58,8 @@ class Preferences : public ErrorBase {
   virtual ~Preferences() = default;
 
  private:
-  std::shared_ptr<ITable> m_table;
-  class Listener : public ITableListener {
-   public:
-    void ValueChanged(ITable* source, llvm::StringRef key,
-                      std::shared_ptr<nt::Value> value, bool isNew) override;
-    void ValueChangedEx(ITable* source, llvm::StringRef key,
-                        std::shared_ptr<nt::Value> value,
-                        uint32_t flags) override;
-  };
-  Listener m_listener;
+  std::shared_ptr<nt::NetworkTable> m_table;
+  NT_EntryListener m_listener;
 };
 
 }  // namespace frc

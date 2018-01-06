@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,10 +7,12 @@
 
 #pragma once
 
+#include <llvm/StringRef.h>
+#include <llvm/Twine.h>
+#include <support/mutex.h>
+
 #include "Base.h"
 #include "Error.h"
-#include "HAL/cpp/priority_mutex.h"
-#include "llvm/StringRef.h"
 
 #define wpi_setErrnoErrorWithContext(context) \
   this->SetErrnoError((context), __FILE__, __FUNCTION__, __LINE__)
@@ -64,15 +66,15 @@ namespace frc {
 
 /**
  * Base class for most objects.
+ *
  * ErrorBase is the base class for most objects since it holds the generated
- * error
- * for that object. In addition, there is a single instance of a global error
- * object
+ * error for that object. In addition, there is a single instance of a global
+ * error object.
  */
 class ErrorBase {
   // TODO: Consider initializing instance variables and cleanup in destructor
  public:
-  ErrorBase() = default;
+  ErrorBase();
   virtual ~ErrorBase() = default;
 
   ErrorBase(const ErrorBase&) = delete;
@@ -80,40 +82,42 @@ class ErrorBase {
 
   virtual Error& GetError();
   virtual const Error& GetError() const;
-  virtual void SetErrnoError(llvm::StringRef contextMessage,
+  virtual void SetErrnoError(const llvm::Twine& contextMessage,
                              llvm::StringRef filename, llvm::StringRef function,
                              int lineNumber) const;
-  virtual void SetImaqError(int success, llvm::StringRef contextMessage,
+  virtual void SetImaqError(int success, const llvm::Twine& contextMessage,
                             llvm::StringRef filename, llvm::StringRef function,
                             int lineNumber) const;
-  virtual void SetError(Error::Code code, llvm::StringRef contextMessage,
+  virtual void SetError(Error::Code code, const llvm::Twine& contextMessage,
                         llvm::StringRef filename, llvm::StringRef function,
                         int lineNumber) const;
   virtual void SetErrorRange(Error::Code code, int32_t minRange,
                              int32_t maxRange, int32_t requestedValue,
-                             llvm::StringRef contextMessage,
+                             const llvm::Twine& contextMessage,
                              llvm::StringRef filename, llvm::StringRef function,
                              int lineNumber) const;
-  virtual void SetWPIError(llvm::StringRef errorMessage, Error::Code code,
-                           llvm::StringRef contextMessage,
+  virtual void SetWPIError(const llvm::Twine& errorMessage, Error::Code code,
+                           const llvm::Twine& contextMessage,
                            llvm::StringRef filename, llvm::StringRef function,
                            int lineNumber) const;
   virtual void CloneError(const ErrorBase& rhs) const;
   virtual void ClearError() const;
   virtual bool StatusIsFatal() const;
-  static void SetGlobalError(Error::Code code, llvm::StringRef contextMessage,
+  static void SetGlobalError(Error::Code code,
+                             const llvm::Twine& contextMessage,
                              llvm::StringRef filename, llvm::StringRef function,
                              int lineNumber);
-  static void SetGlobalWPIError(llvm::StringRef errorMessage,
-                                llvm::StringRef contextMessage,
+  static void SetGlobalWPIError(const llvm::Twine& errorMessage,
+                                const llvm::Twine& contextMessage,
                                 llvm::StringRef filename,
                                 llvm::StringRef function, int lineNumber);
   static Error& GetGlobalError();
 
  protected:
   mutable Error m_error;
+
   // TODO: Replace globalError with a global list of all errors.
-  static priority_mutex _globalErrorMutex;
+  static wpi::mutex _globalErrorMutex;
   static Error _globalError;
 };
 

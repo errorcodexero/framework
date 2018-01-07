@@ -12,7 +12,7 @@ namespace ctre
     {
       namespace can
       {
-		class WPI_TalonSRX ;
+	class WPI_TalonSRX ;
       }
     }
   }
@@ -33,9 +33,9 @@ class Talon_srx_control{
 #define TALON_SRX_MODES X(INIT) X(PERCENT) X(SPEED) X(DISABLE)
   enum class Mode{
 #define X(NAME) NAME,
-	TALON_SRX_MODES
+    TALON_SRX_MODES
 #undef X
-	  };
+      };
   
  private:
   Mode mode;

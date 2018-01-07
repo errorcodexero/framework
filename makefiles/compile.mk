@@ -66,7 +66,7 @@ endif
 ifdef CTRE
 ifeq ($(CTRE), true)
 CXXFLAGS += -I../../external/CTRE_FRCLibs/cpp/include
-ADDLIBS += -L../../external/CTRE_FRCLibs/cpp/lib -lCTRE_Phoenix.a
+ADDLIBS += -L../../external/CTRE_FRCLibs/cpp/lib -lCTRE_Phoenix -lCTRE_PhoenixCCI
 endif
 endif
 
@@ -76,7 +76,9 @@ endif
 ifdef WPILIB
 ifeq ($(WPILIB), true)
 CXXFLAGS += -I../../external/wpilib/cpp/current/include
-ADDLIBS += -L../../external/wpilib/cpp/current/lib -lntcore -lwpi
+ADDLIBS += -L../../external/wpilib/cpp/current/reflib/linux/athena/shared
+ADDLIBS += -L../../external/wpilib/common/current/lib/linux/athena/shared
+ADDLIBS += -lwpi -lpthread
 endif
 endif
 

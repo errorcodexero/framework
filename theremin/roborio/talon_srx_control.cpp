@@ -82,6 +82,7 @@ void Talon_srx_control::set(Talon_srx_output a, bool enable) {
     break;
   case Talon_srx_output::Mode::SPEED:
     if(mode!=Talon_srx_control::Mode::SPEED || !pid_approx(out.pid,a.pid)){
+#ifdef NOTYET
       talon->SetPID(a.pid.p,a.pid.i,a.pid.d,a.pid.f);	
       talon->SetFeedbackDevice(CANTalon::QuadEncoder); //TODO: change this so that we can use other feedback types
       talon->ConfigEncoderCodesPerRev(200); //TODO: change this so it can be numbers other than 200. Maybe move it into the get function
@@ -90,6 +91,7 @@ void Talon_srx_control::set(Talon_srx_output a, bool enable) {
       talon->Set(ControlMode::Velocity, a.speed);
       out=a;
       mode=Talon_srx_control::Mode::SPEED;
+#endif
     } else if((a.speed!=out.speed || since_query > QUERY_LIM) /*&& out!=last_out*/){ 
       talon->Set(a.speed);
       out.speed=a.speed;
@@ -103,7 +105,8 @@ void Talon_srx_control::set(Talon_srx_output a, bool enable) {
 Talon_srx_input Talon_srx_control::get(){
   if(since_query > QUERY_LIM){
     in.current=talon->GetBusVoltage(); //TODO: look into this again
-		
+
+#ifdef NOTYET
     switch(talon->IsSensorPresent(CANTalon::QuadEncoder)){
     case CANTalon::FeedbackStatusPresent:
       in.velocity=talon->GetSpeed();
@@ -120,12 +123,16 @@ Talon_srx_input Talon_srx_control::get(){
     in.fwd_limit_switch=talon->IsFwdLimitSwitchClosed();
     in.rev_limit_switch=talon->IsRevLimitSwitchClosed();
     since_query=0;
+#endif
   }
   since_query++;
   return in;
 }
 
-Talon_srx_controls::Talon_srx_controls():init_(false){}
+Talon_srx_controls::Talon_srx_controls()
+{
+  init_ = false ;
+}
 
 void Talon_srx_controls::init(){
   if(!init_){

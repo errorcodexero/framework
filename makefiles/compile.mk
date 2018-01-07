@@ -66,7 +66,7 @@ endif
 ifdef CTRE
 ifeq ($(CTRE), true)
 CXXFLAGS += -I../../external/CTRE_FRCLibs/cpp/include
-ADDLIBS += -L../../external/CTRE_FRCLibs/cpp/lib -lCTRLib
+ADDLIBS += -L../../external/CTRE_FRCLibs/cpp/lib -lCTRE_Phoenix.a
 endif
 endif
 

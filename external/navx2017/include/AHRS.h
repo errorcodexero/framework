@@ -10,7 +10,6 @@
 
 #include "WPILib.h"
 #include "ITimestampedDataSubscriber.h"
-#include "networktables/NetworkTableEntry.h"
 #include <thread>
 
 class IIOProvider;
@@ -20,6 +19,7 @@ class OffsetTracker;
 class AHRSInternal;
 
 class AHRS : public SensorBase,
+             public LiveWindowSendable,
              public PIDSource  {
 public:
 
@@ -109,6 +109,8 @@ private:
     long                last_sensor_timestamp;
     double              last_update_time;
 
+    std::shared_ptr<ITable>	table;
+
     InertialDataIntegrator *integrator;
     ContinuousAngleTracker *yaw_angle_tracker;
     OffsetTracker *         yaw_offset_tracker;
@@ -191,8 +193,6 @@ public:
     int GetActualUpdateRate();
     int GetRequestedUpdateRate();
 
-    void EnableLogging(bool enable);
-
 private:
     void SPIInit( SPI::Port spi_port_id, uint32_t bitrate, uint8_t update_rate_hz );
     void I2CInit( I2C::Port i2c_port_id, uint8_t update_rate_hz );
@@ -200,15 +200,18 @@ private:
     void commonInit( uint8_t update_rate_hz );
     static int ThreadFunc(IIOProvider *io_provider);
 
-    /* Sendable implementation */
-    void InitSendable(frc::SendableBuilder&);
+    /* LiveWindowSendable implementation */
+    void InitTable(std::shared_ptr<ITable> subtable);
+    std::shared_ptr<ITable> GetTable() const;
+    std::string GetSmartDashboardType() const;
+    void UpdateTable();
+    void StartLiveWindowMode();
+    void StopLiveWindowMode();
 
     /* PIDSource implementation */
     double PIDGet();
 
     uint8_t GetActualUpdateRateInternal(uint8_t update_rate);
-
-    nt::NetworkTableEntry m_valueEntry;
 };
 
 #endif /* SRC_AHRS_H_ */

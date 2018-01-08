@@ -20,5 +20,8 @@ size_t Drivebase::pdb_location(Drivebase::Side s, size_t which)
     case 1:
       ret = 13 ;
       break ;
+    }
   }
+
+  return ret ;
 }

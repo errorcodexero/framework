@@ -1,32 +1,3 @@
-#include "drivebase.h"
-#include <iostream>
-#include <math.h>
-#include "../util/util.h"
-#include "../util/robot_constants.h"
-#include "../util/motion_profile.h"
-//temp
-#include "../util/point.h"
-#include <fstream>
-//end temp
-using namespace std;
-
-//these are all off by one
-#define L_MOTOR_LOC_1 0
-#define L_MOTOR_LOC_2 1
-#define R_MOTOR_LOC_1 2
-#define R_MOTOR_LOC_2 3
-
-unsigned pdb_location(Drivebase::Motor m){
-	#define X(NAME,INDEX) if(m==Drivebase::NAME) return INDEX;
-	//WILL NEED CORRECT VALUES
-	X(LEFT1,0)
-	X(LEFT2,1)
-	X(RIGHT1,2)
-	X(RIGHT2,13)
-	#undef X
-	assert(0);
-	//assert(m>=0 && m<Drivebase::MOTORS);
-}
 
 int encoderconv(Maybe_inline<Encoder_output> encoder){
 	if(encoder) return *encoder;

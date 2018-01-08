@@ -1,15 +1,19 @@
+#include "../util/interface.h"
+#include "../util/countdown_timer.h"
+#include "../util/stall_monitor.h"
 #include "motor_check.h"
 #include <vector>
 
-struct Drivebase
+class Drivebase
 {
+ public:
+  enum class Side {
+    Left,
+    Right
+  } ;
+      
   typedef std::pair<Digital_in, Digital_in> Encoder_info ;
   
-  Drivebase(int count)
-  {
-    motor_check.resize(count) ;
-  }
-
   struct Encoder_ticks
   {
     double l ;
@@ -26,6 +30,12 @@ struct Drivebase
       l = vl ;
       r = vr ;
     }
+  } ;
+
+  struct Output
+  {
+    double l ;
+    double r ;
   } ;
 
   struct Speeds
@@ -70,26 +80,39 @@ struct Drivebase
 
   struct Input_reader
   {
-  } ;
-
-  struct Output
-  {
+    Input operator()(Robot_inputs const &) const ;
+    Robot_inputs operator()(Robot_inputs, Input) const ;
   } ;
 
   struct Goal
   {
-  } ;
+    enum class Mode {
+        ABSOLUTE,
+	DISTANCES,
+	DRIVE_STRAIGHT,
+	ROTATE
+      } ;
+  private:
+    Mode mode_ ;
+    Distances distances_ ;
+    double angle_ ;
+    double angle_i_ ;
+    double left_ ;
+    double right_ ;
 
-  struct Status_detail
-  {
-  } ;
+  public:
+    Goal() ;
+    Mode mode() const ;
+    Distances distances() const ;
+    Rad angle() const ;
+    double angle_i() const ;
+    double right() const ;
+    double left() const ;
 
-  struct Estimator
-  {
-  } ;
-
-  struct Output_applicator
-  {
+    static Goal distances(Distances) ;
+    static Goal absolute(double, double) ;
+    static Goal drive_straight(Distances, double, double) ;
+    static Goal rotate(Rad) ;
   } ;
 
   struct Status
@@ -104,8 +127,50 @@ struct Drivebase
     double angle ;
     double prev_angle ;
   } ;
+  typedef Status Status_detail ;
 
-  struct Status DRIVEBASE_STATUS ;
+  struct Estimator
+  {
+    std::vector<Motor_check> motor_check ;
+    Status_detail last ;
+    Countdown_timer speed_timer ;
+    Stall_monitor stall_monitor ;
 
+    void update(Time, Input, Output) ;
+    Status_detail get() const ;
+    Estimator() ;
+  } ;
+
+  struct Output_applicator
+  {
+    Robot_outputs operator()(Robot_outputs, Output) const ;
+    Output operator()(Robot_outputs) const ;
+  } ;
+
+ public:
+  Drivebase(int count)
+  {
+    motor_check.resize(count) ;
+  }
+
+  Estimator estimator ;
+  Input_reader input_reader ;
   std::vector<Motor_check> motor_check ;
+
+  //
+  // Static functions associated with the drive base class
+  //
+
+  //
+  // Return the PDP location of a motor given the side it is on and
+  // which motor it is on that given side.
+  //
+  static unsigned pdb_location(Side s, size_t motor) ;
+
+  //
+  // Return the encoder value for a given encoder.  The value may not be valid
+  // in which case return zero.
+  //
+  static int encoderconv(Maybe_inline<Encoder_output> encoder) ;
+
 } ;

@@ -271,7 +271,7 @@ Toplevel::Goal Navx_drive_straight::run(Run_info info){
 
 Toplevel::Goal Navx_drive_straight::run(Run_info info, Toplevel::Goal goals){
 	drive_goal = Drivebase::Goal::drive_straight(Drivebase::Distances(target_distance) + info.status.drive.distances, info.status.drive.angle, angle_i);
-	angle_i += (total_angle_to_displacement((*drive_goal).angle()) - total_angle_to_displacement(info.status.drive.angle)) * info.status.drive.dt;
+	angle_i += (Drivebase::normalize_angle((*drive_goal).angle()) - Drivebase::normalize_angle(info.status.drive.angle)) * info.status.drive.dt;
 	goals.drive = Drivebase::Goal::drive_straight((*drive_goal).distances(), (*drive_goal).angle(), angle_i);
 	return goals;
 }

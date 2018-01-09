@@ -299,7 +299,9 @@ void visit(Func f,Drivebase::Output const& a){
 
 template<typename Func>
 void visit(Func f,Drivebase::Status const& r){
+#ifdef NOTYET
 	DRIVEBASE_STATUS(VISIT_2ND)
+#endif
 }
 
 template<typename Func>

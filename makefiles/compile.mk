@@ -36,6 +36,11 @@ CPPFLAGS =
 TARGETDIR=../builddir/$(CONFIG)
 
 #
+# The set of directories to make in the target
+#
+TARGETMKDIRS=$(addprefix $(OBJDIR)/,$(MKDIRS))
+
+#
 # Target name
 #
 TARGETNAME=$(basename $(TARGET))

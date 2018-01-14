@@ -32,7 +32,9 @@ $(REALTARGET): $(OBJS)
 mkdirs::
 	-mkdir -p $(TARGETDIR)
 	-mkdir -p $(OBJDIR)
+ifneq "$(TARGETMKDIRS)" ""
 	-mkdir -p $(TARGETMKDIRS)
+endif
 
 #
 # Rule to make object files

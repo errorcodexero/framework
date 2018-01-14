@@ -18,7 +18,14 @@ endif
 #
 # The compiler to use to build the robot code
 #
+ifeq ($(OS),Windows_NT)
 CXX = ../../external/frc/bin/arm-frc-linux-gnueabi-g++
+AR = ../../external/frc/bin/arm-frc-linux-gnueabi-ar
+else
+CXX = arm-frc-linux-gnueabi-g++
+CXX = arm-frc-linux-gnueabi-ar
+endif
+
 
 #
 # The flags to apply to the C++ compilation

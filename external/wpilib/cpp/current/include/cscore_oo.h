@@ -1,14 +1,17 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2015. All Rights Reserved.                             */
+/* Copyright (c) 2015-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#ifndef CSCORE_OO_H_
-#define CSCORE_OO_H_
+#ifndef CSCORE_CSCORE_OO_H_
+#define CSCORE_CSCORE_OO_H_
 
 #include <initializer_list>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "cscore_cpp.h"
 
@@ -119,6 +122,8 @@ class VideoSource {
   std::string GetDescription() const;
 
   /// Get the last time a frame was captured.
+  /// This uses the same time base as wpi::Now().
+  /// @return Time in 1 us increments.
   uint64_t GetLastFrameTime() const;
 
   /// Is the source currently connected to whatever is providing the images?
@@ -408,6 +413,34 @@ class CvSource : public VideoSource {
                                int minimum, int maximum, int step,
                                int defaultValue, int value);
 
+  /// Create an integer property.
+  /// @param name Property name
+  /// @param minimum Minimum value
+  /// @param maximum Maximum value
+  /// @param step Step value
+  /// @param defaultValue Default value
+  /// @param value Current value
+  /// @return Property
+  VideoProperty CreateIntegerProperty(llvm::StringRef name, int minimum,
+                                      int maximum, int step, int defaultValue,
+                                      int value);
+
+  /// Create a boolean property.
+  /// @param name Property name
+  /// @param defaultValue Default value
+  /// @param value Current value
+  /// @return Property
+  VideoProperty CreateBooleanProperty(llvm::StringRef name, bool defaultValue,
+                                      bool value);
+
+  /// Create a string property.
+  /// @param name Property name
+  /// @param defaultValue Default value
+  /// @param value Current value
+  /// @return Property
+  VideoProperty CreateStringProperty(llvm::StringRef name,
+                                     llvm::StringRef value);
+
   /// Configure enum property choices.
   /// @param property Property
   /// @param choices Choices
@@ -547,13 +580,15 @@ class CvSink : public VideoSink {
   /// Times out (returning 0) after timeout seconds.
   /// The provided image will have three 8-bit channels stored in BGR order.
   /// @return Frame time, or 0 on error (call GetError() to obtain the error
-  ///         message);
+  ///         message); the frame time is in the same time base as wpi::Now(),
+  ///         and is in 1 us increments.
   uint64_t GrabFrame(cv::Mat& image, double timeout = 0.225) const;
 
   /// Wait for the next frame and get the image.  May block forever.
   /// The provided image will have three 8-bit channels stored in BGR order.
   /// @return Frame time, or 0 on error (call GetError() to obtain the error
-  ///         message);
+  ///         message); the frame time is in the same time base as wpi::Now(),
+  ///         and is in 1 us increments.
   uint64_t GrabFrameNoTimeout(cv::Mat& image) const;
 
   /// Get error string.  Call this if WaitForFrame() returns 0 to determine
@@ -613,4 +648,4 @@ class VideoListener {
 
 #include "cscore_oo.inl"
 
-#endif  // CSCORE_OO_H_
+#endif  // CSCORE_CSCORE_OO_H_

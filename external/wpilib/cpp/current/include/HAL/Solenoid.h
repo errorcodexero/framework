@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -30,6 +30,9 @@ int32_t HAL_GetPCMSolenoidBlackList(int32_t module, int32_t* status);
 HAL_Bool HAL_GetPCMSolenoidVoltageStickyFault(int32_t module, int32_t* status);
 HAL_Bool HAL_GetPCMSolenoidVoltageFault(int32_t module, int32_t* status);
 void HAL_ClearAllPCMStickyFaults(int32_t module, int32_t* status);
+void HAL_SetOneShotDuration(HAL_SolenoidHandle solenoidPortHandle,
+                            int32_t durMS, int32_t* status);
+void HAL_FireOneShot(HAL_SolenoidHandle solenoidPortHandle, int32_t* status);
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif

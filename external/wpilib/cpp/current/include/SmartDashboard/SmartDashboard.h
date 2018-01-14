@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2011-2017. All Rights Reserved.                        */
+/* Copyright (c) 2011-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,17 +7,17 @@
 
 #pragma once
 
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
+#include <networktables/NetworkTableValue.h>
+
 #include "SensorBase.h"
-#include "SmartDashboard/NamedSendable.h"
-#include "SmartDashboard/Sendable.h"
-#include "tables/ITable.h"
 
 namespace frc {
+
+class Sendable;
 
 class SmartDashboard : public SensorBase {
  public:
@@ -38,7 +38,7 @@ class SmartDashboard : public SensorBase {
   static void Delete(llvm::StringRef key);
 
   static void PutData(llvm::StringRef key, Sendable* data);
-  static void PutData(NamedSendable* value);
+  static void PutData(Sendable* value);
   static Sendable* GetData(llvm::StringRef keyName);
 
   static bool PutBoolean(llvm::StringRef keyName, bool value);
@@ -84,17 +84,10 @@ class SmartDashboard : public SensorBase {
                               std::shared_ptr<nt::Value> defaultValue);
   static std::shared_ptr<nt::Value> GetValue(llvm::StringRef keyName);
 
+  static void UpdateValues();
+
  private:
   virtual ~SmartDashboard() = default;
-
-  /** The {@link NetworkTable} used by {@link SmartDashboard} */
-  static std::shared_ptr<ITable> m_table;
-
-  /**
-   * A map linking tables in the SmartDashboard to the
-   * {@link SmartDashboardData} objects they came from.
-   */
-  static std::map<std::shared_ptr<ITable>, Sendable*> m_tablesToData;
 };
 
 }  // namespace frc

@@ -1,0 +1,3 @@
+[submodule "theremin"]
+	path = theremin
+	url = https://github.com/errorcodexero/theremin.git

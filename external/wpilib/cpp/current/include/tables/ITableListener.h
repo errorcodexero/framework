@@ -1,21 +1,33 @@
-/*
- * ITableListener.h
- */
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) FIRST 2017-2018. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
-#ifndef ITABLELISTENER_H_
-#define ITABLELISTENER_H_
+#ifndef NTCORE_TABLES_ITABLELISTENER_H_
+#define NTCORE_TABLES_ITABLELISTENER_H_
 
 #include <memory>
 
-#include "llvm/StringRef.h"
-#include "nt_Value.h"
+#include <llvm/StringRef.h>
+#include <support/deprecated.h>
+
+#include "networktables/NetworkTableValue.h"
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 class ITable;
 
 /**
  * A listener that listens to changes in values in a {@link ITable}
  */
-class ITableListener {
+class WPI_DEPRECATED(
+    "Use EntryListener, TableEntryListener, or TableListener as appropriate")
+    ITableListener {
  public:
   virtual ~ITableListener() = default;
   /**
@@ -44,4 +56,8 @@ class ITableListener {
                               unsigned int flags);
 };
 
-#endif /* ITABLELISTENER_H_ */
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
+#endif  // NTCORE_TABLES_ITABLELISTENER_H_

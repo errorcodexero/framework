@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2014-2017. All Rights Reserved.                        */
+/* Copyright (c) 2014-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,26 +7,34 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include <HAL/Types.h>
 
-#include "HAL/Types.h"
-#include "LiveWindow/LiveWindowSendable.h"
+#include "ErrorBase.h"
 #include "SensorBase.h"
-#include "tables/ITableListener.h"
+#include "SmartDashboard/SendableBase.h"
 
 namespace frc {
 
 /**
- * PCM compressor
+ * Class for operating a compressor connected to a %PCM (Pneumatic Control
+ * Module).
+ *
+ * The PCM will automatically run in closed loop mode by default whenever a
+ * Solenoid object is created. For most cases, a Compressor object does not need
+ * to be instantiated or used in a robot program. This class is only required in
+ * cases where the robot program needs a more detailed status of the compressor
+ * or to enable/disable closed loop control.
+ *
+ * Note: you cannot operate the compressor directly from this class as doing so
+ * would circumvent the safety provided by using the pressure switch and closed
+ * loop control. You can only turn off closed loop control, thereby stopping
+ * the compressor from operating.
  */
-class Compressor : public SensorBase,
-                   public LiveWindowSendable,
-                   public ITableListener {
+class Compressor : public ErrorBase, public SendableBase {
  public:
   // Default PCM ID is 0
-  explicit Compressor(int pcmID = GetDefaultSolenoidModule());
-  virtual ~Compressor() = default;
+  explicit Compressor(int pcmID = SensorBase::GetDefaultSolenoidModule());
+  ~Compressor() override = default;
 
   void Start();
   void Stop();
@@ -47,14 +55,7 @@ class Compressor : public SensorBase,
   bool GetCompressorNotConnectedFault() const;
   void ClearAllPCMStickyFaults();
 
-  void UpdateTable() override;
-  void StartLiveWindowMode() override;
-  void StopLiveWindowMode() override;
-  std::string GetSmartDashboardType() const override;
-  void InitTable(std::shared_ptr<ITable> subTable) override;
-  std::shared_ptr<ITable> GetTable() const override;
-  void ValueChanged(ITable* source, llvm::StringRef key,
-                    std::shared_ptr<nt::Value> value, bool isNew) override;
+  void InitSendable(SendableBuilder& builder) override;
 
  protected:
   HAL_CompressorHandle m_compressorHandle;
@@ -62,8 +63,6 @@ class Compressor : public SensorBase,
  private:
   void SetCompressor(bool on);
   int m_module;
-
-  std::shared_ptr<ITable> m_table;
 };
 
 }  // namespace frc

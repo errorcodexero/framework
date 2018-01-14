@@ -1,12 +1,12 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016. All Rights Reserved.                             */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#ifndef CSCORE_H_
-#define CSCORE_H_
+#ifndef CSCORE_CSCORE_H_
+#define CSCORE_CSCORE_H_
 
 /* C API */
 #include "cscore_c.h"
@@ -15,6 +15,6 @@
 /* C++ API */
 #include "cscore_cpp.h"
 #include "cscore_oo.h"
-#endif  /* __cplusplus */
+#endif /* __cplusplus */
 
-#endif  /* CSCORE_H_ */
+#endif  // CSCORE_CSCORE_H_

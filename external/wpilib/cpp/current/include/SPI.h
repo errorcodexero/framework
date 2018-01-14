@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,12 +7,19 @@
 
 #pragma once
 
-#include "SensorBase.h"
+#include <stdint.h>
+
+#include <memory>
+
+#include <llvm/ArrayRef.h>
+
+#include "ErrorBase.h"
+
+enum HAL_SPIPort : int32_t;
 
 namespace frc {
 
-class DigitalOutput;
-class DigitalInput;
+class DigitalSource;
 
 /**
  * SPI bus interface class.
@@ -21,11 +28,12 @@ class DigitalInput;
  * It probably should not be used directly.
  *
  */
-class SPI : public SensorBase {
+class SPI : public ErrorBase {
  public:
-  enum Port { kOnboardCS0, kOnboardCS1, kOnboardCS2, kOnboardCS3, kMXP };
-  explicit SPI(Port SPIport);
-  virtual ~SPI();
+  enum Port { kOnboardCS0 = 0, kOnboardCS1, kOnboardCS2, kOnboardCS3, kMXP };
+
+  explicit SPI(Port port);
+  ~SPI() override;
 
   SPI(const SPI&) = delete;
   SPI& operator=(const SPI&) = delete;
@@ -48,9 +56,19 @@ class SPI : public SensorBase {
   virtual int Read(bool initiate, uint8_t* dataReceived, int size);
   virtual int Transaction(uint8_t* dataToSend, uint8_t* dataReceived, int size);
 
-  void InitAccumulator(double period, int cmd, int xfer_size, int valid_mask,
-                       int valid_value, int data_shift, int data_size,
-                       bool is_signed, bool big_endian);
+  void InitAuto(int bufferSize);
+  void FreeAuto();
+  void SetAutoTransmitData(llvm::ArrayRef<uint8_t> dataToSend, int zeroSize);
+  void StartAutoRate(double period);
+  void StartAutoTrigger(DigitalSource& source, bool rising, bool falling);
+  void StopAuto();
+  void ForceAutoRead();
+  int ReadAutoReceivedData(uint8_t* buffer, int numToRead, double timeout);
+  int GetAutoDroppedCount();
+
+  void InitAccumulator(double period, int cmd, int xferSize, int validMask,
+                       int validValue, int dataShift, int dataSize,
+                       bool isSigned, bool bigEndian);
   void FreeAccumulator();
   void ResetAccumulator();
   void SetAccumulatorCenter(int center);
@@ -62,13 +80,16 @@ class SPI : public SensorBase {
   void GetAccumulatorOutput(int64_t& value, int64_t& count) const;
 
  protected:
-  int m_port;
-  bool m_msbFirst = false;          // default little-endian
-  bool m_sampleOnTrailing = false;  // default data updated on falling edge
-  bool m_clk_idle_high = false;     // default clock active high
+  HAL_SPIPort m_port;
+  bool m_msbFirst = false;          // Default little-endian
+  bool m_sampleOnTrailing = false;  // Default data updated on falling edge
+  bool m_clk_idle_high = false;     // Default clock active high
 
  private:
   void Init();
+
+  class Accumulator;
+  std::unique_ptr<Accumulator> m_accum;
 };
 
 }  // namespace frc

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2011-2017. All Rights Reserved.                        */
+/* Copyright (c) 2011-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,31 +7,63 @@
 
 #pragma once
 
-#include <memory>
 #include <string>
 
-#include "tables/ITable.h"
+#include <llvm/Twine.h>
 
 namespace frc {
 
+class SendableBuilder;
+
 class Sendable {
  public:
-  /**
-   * Initializes a table for this sendable object.
-   * @param subtable The table to put the values in.
-   */
-  virtual void InitTable(std::shared_ptr<ITable> subtable) = 0;
+  virtual ~Sendable() = default;
 
   /**
-   * @return the table that is currently associated with the sendable
+   * Gets the name of this Sendable object.
+   *
+   * @return Name
    */
-  virtual std::shared_ptr<ITable> GetTable() const = 0;
+  virtual std::string GetName() const = 0;
 
   /**
-   * @return the string representation of the named data type that will be used
-   *         by the smart dashboard for this sendable
+   * Sets the name of this Sendable object.
+   *
+   * @param name name
    */
-  virtual std::string GetSmartDashboardType() const = 0;
+  virtual void SetName(const llvm::Twine& name) = 0;
+
+  /**
+   * Sets both the subsystem name and device name of this Sendable object.
+   *
+   * @param subsystem subsystem name
+   * @param name device name
+   */
+  void SetName(const llvm::Twine& subsystem, const llvm::Twine& name) {
+    SetSubsystem(subsystem);
+    SetName(name);
+  }
+
+  /**
+   * Gets the subsystem name of this Sendable object.
+   *
+   * @return Subsystem name
+   */
+  virtual std::string GetSubsystem() const = 0;
+
+  /**
+   * Sets the subsystem name of this Sendable object.
+   *
+   * @param subsystem subsystem name
+   */
+  virtual void SetSubsystem(const llvm::Twine& subsystem) = 0;
+
+  /**
+   * Initializes this Sendable object.
+   *
+   * @param builder sendable builder
+   */
+  virtual void InitSendable(SendableBuilder& builder) = 0;
 };
 
 }  // namespace frc

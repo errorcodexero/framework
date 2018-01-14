@@ -1,9 +1,9 @@
 The purpose of this document is to give instruction to manually install
-CTRE FRC Libraries.
+CTRE Phoenix FRC Libraries.
 
 For Java/C++:
-	NOTE: Old library files are titled TalonSRXLib.
-	These should be deleted as new library files use the CTRLib
+	NOTE: Old library files are titled TalonSRXLib or CTRLib.
+	These should be deleted as new library files use the CTRE_Phoenix
 	naming convention.  Duplicate libraries may cause issues
 	when writing code.
 
@@ -22,24 +22,10 @@ For Java/C++:
 	can be included this way.
 
 
-For LabVIEW:
-[NOTE: LabVIEW is Windows-only for FRC]
-	The Directory for third-party VIs is 
-	{LabVIEW Install}\vi.lib\Rock Robotics\WPI\Third Party\[Subfolder]
-
-	There are currently three subfolders: Actuators, CANMotors, and 
-	Sensors.  Folders of VIs (that contain a *.mnu file)
-	placed in these subfolders will appear in the subpalletes of the
-	same name.
-
-	Move LabVIEW\Talon to the CANMotors subfolder and 
-	LabVIEW\Pigeon to the Sensors subfolder.
-
-
 For Robotbuilder:
 
 	These are Robotbuilder extensions for using CTRE classes.
-	It currently contains the CAN Talon extension.
+	It currently contains the Talon SRX, Victor SPX, CANifier, and Pigeon IMU extensions.
 
-	Take the desired extension folder (eg. "CAN Talon") and place it in
+	Take the desired extension folder (eg. "Talon SRX") and place it in
 	USERHOME\Robotbuilder\extensions.

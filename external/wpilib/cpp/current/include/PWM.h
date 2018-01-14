@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,13 +7,12 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include <stdint.h>
 
-#include "HAL/Types.h"
-#include "LiveWindow/LiveWindowSendable.h"
-#include "SensorBase.h"
-#include "tables/ITableListener.h"
+#include <HAL/Types.h>
+
+#include "ErrorBase.h"
+#include "SmartDashboard/SendableBase.h"
 
 namespace frc {
 
@@ -23,7 +22,7 @@ namespace frc {
  * The values supplied as arguments for PWM outputs range from -1.0 to 1.0. They
  * are mapped to the hardware dependent values, in this case 0-2000 for the
  * FPGA. Changes are immediately sent to the FPGA, and the update occurs at the
- * next FPGA cycle. There is no delay.
+ * next FPGA cycle (5.005ms). There is no delay.
  *
  * As of revision 0.1.10 of the FPGA, the FPGA interprets the 0-2000 values as
  * follows:
@@ -34,18 +33,28 @@ namespace frc {
  *   - 1 = minimum pulse width (currently .5ms)
  *   - 0 = disabled (i.e. PWM output is held low)
  */
-class PWM : public SensorBase,
-            public ITableListener,
-            public LiveWindowSendable {
+class PWM : public ErrorBase, public SendableBase {
  public:
+  /**
+   * Represents the amount to multiply the minimum servo-pulse pwm period by.
+   */
   enum PeriodMultiplier {
+    /**
+     * Don't skip pulses. PWM pulses occur every 5.005 ms
+     */
     kPeriodMultiplier_1X = 1,
+    /**
+     * Skip every other pulse. PWM pulses occur every 10.010 ms
+     */
     kPeriodMultiplier_2X = 2,
+    /**
+     * Skip three out of four pulses. PWM pulses occur every 20.020 ms
+     */
     kPeriodMultiplier_4X = 4
   };
 
   explicit PWM(int channel);
-  virtual ~PWM();
+  ~PWM() override;
   virtual void SetRaw(uint16_t value);
   virtual uint16_t GetRaw() const;
   virtual void SetPosition(double pos);
@@ -65,16 +74,7 @@ class PWM : public SensorBase,
   int GetChannel() const { return m_channel; }
 
  protected:
-  void ValueChanged(ITable* source, llvm::StringRef key,
-                    std::shared_ptr<nt::Value> value, bool isNew) override;
-  void UpdateTable() override;
-  void StartLiveWindowMode() override;
-  void StopLiveWindowMode() override;
-  std::string GetSmartDashboardType() const override;
-  void InitTable(std::shared_ptr<ITable> subTable) override;
-  std::shared_ptr<ITable> GetTable() const override;
-
-  std::shared_ptr<ITable> m_table;
+  void InitSendable(SendableBuilder& builder) override;
 
  private:
   int m_channel;

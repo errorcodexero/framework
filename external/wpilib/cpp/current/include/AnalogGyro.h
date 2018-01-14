@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,8 +9,9 @@
 
 #include <memory>
 
+#include <HAL/Types.h>
+
 #include "GyroBase.h"
-#include "HAL/Types.h"
 
 namespace frc {
 
@@ -31,8 +32,8 @@ class AnalogInput;
  */
 class AnalogGyro : public GyroBase {
  public:
-  static const int kOversampleBits = 10;
-  static const int kAverageBits = 0;
+  static constexpr int kOversampleBits = 10;
+  static constexpr int kAverageBits = 0;
   static constexpr double kSamplesPerSecond = 50.0;
   static constexpr double kCalibrationSampleTime = 5.0;
   static constexpr double kDefaultVoltsPerDegreePerSecond = 0.007;

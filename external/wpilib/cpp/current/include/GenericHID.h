@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "ErrorBase.h"
+
 namespace frc {
 
 class DriverStation;
@@ -18,11 +20,11 @@ class DriverStation;
 /**
  * GenericHID Interface.
  */
-class GenericHID {
+class GenericHID : public ErrorBase {
  public:
-  typedef enum { kLeftRumble, kRightRumble } RumbleType;
+  enum RumbleType { kLeftRumble, kRightRumble };
 
-  typedef enum {
+  enum HIDType {
     kUnknown = -1,
     kXInputUnknown = 0,
     kXInputGamepad = 1,
@@ -40,7 +42,7 @@ class GenericHID {
     kHIDDriving = 22,
     kHIDFlight = 23,
     kHID1stPerson = 24
-  } HIDType;
+  };
 
   enum JoystickHand { kLeftHand = 0, kRightHand = 1 };
 
@@ -49,16 +51,23 @@ class GenericHID {
 
   virtual double GetX(JoystickHand hand = kRightHand) const = 0;
   virtual double GetY(JoystickHand hand = kRightHand) const = 0;
-  virtual double GetRawAxis(int axis) const;
 
   bool GetRawButton(int button) const;
+  bool GetRawButtonPressed(int button);
+  bool GetRawButtonReleased(int button);
 
+  double GetRawAxis(int axis) const;
   int GetPOV(int pov = 0) const;
-  int GetPOVCount() const;
 
-  int GetPort() const;
+  int GetAxisCount() const;
+  int GetPOVCount() const;
+  int GetButtonCount() const;
+
   GenericHID::HIDType GetType() const;
   std::string GetName() const;
+  int GetAxisType(int axis) const;
+
+  int GetPort() const;
 
   void SetOutput(int outputNumber, bool value);
   void SetOutputs(int value);

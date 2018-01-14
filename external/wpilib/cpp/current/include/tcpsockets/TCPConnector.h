@@ -6,7 +6,7 @@
 
    ------------------------------------------
 
-   Copyright © 2013 [Vic Hargrave - http://vichargrave.com]
+   Copyright (c) 2013 [Vic Hargrave - http://vichargrave.com]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -25,7 +25,9 @@
 #define WPIUTIL_TCPSOCKETS_TCPCONNECTOR_H_
 
 #include <memory>
+#include <utility>
 
+#include "llvm/ArrayRef.h"
 #include "tcpsockets/NetworkStream.h"
 
 namespace wpi {
@@ -37,6 +39,9 @@ class TCPConnector {
   static std::unique_ptr<NetworkStream> connect(const char* server, int port,
                                                 Logger& logger,
                                                 int timeout = 0);
+  static std::unique_ptr<NetworkStream> connect_parallel(
+      llvm::ArrayRef<std::pair<const char*, int>> servers, Logger& logger,
+      int timeout = 0);
 };
 
 }  // namespace wpi

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2014-2017. All Rights Reserved.                        */
+/* Copyright (c) 2014-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -10,7 +10,7 @@
 namespace frc {
 
 /**
- * Interface for yaw rate gyros
+ * Interface for yaw rate gyros.
  */
 class Gyro {
  public:
@@ -48,9 +48,9 @@ class Gyro {
   virtual double GetAngle() const = 0;
 
   /**
-   * Return the rate of rotation of the gyro
+   * Return the rate of rotation of the gyro.
    *
-   * The rate is based on the most recent reading of the gyro analog value
+   * The rate is based on the most recent reading of the gyro analog value.
    *
    * @return the current rate in degrees per second
    */

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,8 +7,9 @@
 
 #pragma once
 
+#include <HAL/AnalogTrigger.h>
+
 #include "DigitalSource.h"
-#include "HAL/AnalogTrigger.h"
 
 namespace frc {
 
@@ -49,7 +50,7 @@ class AnalogTriggerOutput : public DigitalSource {
   friend class AnalogTrigger;
 
  public:
-  virtual ~AnalogTriggerOutput();
+  ~AnalogTriggerOutput() override;
   bool Get() const;
 
   // DigitalSource interface
@@ -57,6 +58,8 @@ class AnalogTriggerOutput : public DigitalSource {
   AnalogTriggerType GetAnalogTriggerTypeForRouting() const override;
   bool IsAnalogTrigger() const override;
   int GetChannel() const override;
+
+  void InitSendable(SendableBuilder& builder) override;
 
  protected:
   AnalogTriggerOutput(const AnalogTrigger& trigger,

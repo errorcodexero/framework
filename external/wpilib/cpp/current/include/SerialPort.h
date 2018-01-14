@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
+/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,9 +9,9 @@
 
 #include <string>
 
+#include <llvm/StringRef.h>
+
 #include "ErrorBase.h"
-#include "llvm/StringRef.h"
-#include "support/deprecated.h"
 
 namespace frc {
 
@@ -36,18 +36,22 @@ class SerialPort : public ErrorBase {
     kParity_Mark = 3,
     kParity_Space = 4
   };
+
   enum StopBits {
     kStopBits_One = 10,
     kStopBits_OnePointFive = 15,
     kStopBits_Two = 20
   };
+
   enum FlowControl {
     kFlowControl_None = 0,
     kFlowControl_XonXoff = 1,
     kFlowControl_RtsCts = 2,
     kFlowControl_DtrDsr = 4
   };
+
   enum WriteBufferMode { kFlushOnAccess = 1, kFlushWhenFull = 2 };
+
   enum Port { kOnboard = 0, kMXP = 1, kUSB = 2, kUSB1 = 2, kUSB2 = 3 };
 
   SerialPort(int baudRate, Port port = kOnboard, int dataBits = 8,
@@ -62,10 +66,6 @@ class SerialPort : public ErrorBase {
   void DisableTermination();
   int GetBytesReceived();
   int Read(char* buffer, int count);
-  WPI_DEPRECATED(
-      "Potential for unexpected behavior. Please use StringRef overload for "
-      "custom length buffers using std::string")
-  int Write(const std::string& buffer, int count);
   int Write(const char* buffer, int count);
   int Write(llvm::StringRef buffer);
   void SetTimeout(double timeout);

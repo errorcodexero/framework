@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2015. All Rights Reserved.                             */
+/* Copyright (c) 2015-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -10,21 +10,9 @@
 
 #include <string>
 
-#ifdef _WIN32
-#include <WinSock2.h>
-#else
-#include <errno.h>
-#endif
-
 namespace wpi {
 
-static inline int SocketErrno() {
-#ifdef _WIN32
-  return WSAGetLastError();
-#else
-  return errno;
-#endif
-}
+int SocketErrno();
 
 std::string SocketStrerror(int code);
 

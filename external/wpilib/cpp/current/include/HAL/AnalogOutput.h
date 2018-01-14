@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -24,5 +24,5 @@ double HAL_GetAnalogOutput(HAL_AnalogOutputHandle analogOutputHandle,
                            int32_t* status);
 HAL_Bool HAL_CheckAnalogOutputChannel(int32_t channel);
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif

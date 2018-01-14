@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2016-2017. All Rights Reserved.                        */
+/* Copyright (c) 2016-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -49,7 +49,8 @@ double HAL_GetPWMPosition(HAL_DigitalHandle pwmPortHandle, int32_t* status);
 void HAL_LatchPWMZero(HAL_DigitalHandle pwmPortHandle, int32_t* status);
 void HAL_SetPWMPeriodScale(HAL_DigitalHandle pwmPortHandle, int32_t squelchMask,
                            int32_t* status);
-int32_t HAL_GetLoopTiming(int32_t* status);
+int32_t HAL_GetPWMLoopTiming(int32_t* status);
+uint64_t HAL_GetPWMCycleStartTime(int32_t* status);
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif

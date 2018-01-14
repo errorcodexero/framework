@@ -23,7 +23,7 @@ CXX = ../../external/frc/bin/arm-frc-linux-gnueabi-g++
 AR = ../../external/frc/bin/arm-frc-linux-gnueabi-ar
 else
 CXX = arm-frc-linux-gnueabi-g++
-CXX = arm-frc-linux-gnueabi-ar
+AR = arm-frc-linux-gnueabi-ar
 endif
 
 
